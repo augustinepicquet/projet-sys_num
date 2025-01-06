@@ -37,8 +37,8 @@ def n_adder(a: Variable, b: Variable, c_in: Variable, i: int | None = None) -> t
     assert 0 <= i < a.bus_size
     if i == 0:
         return full_adder(a[i], b[i], c_in)
-    (res_rest, c_rest) = n_adder(a, b, c_in, i-1)
-    (res_i, c_out) = full_adder(a[i], b[i], c_rest)
+    (res_i, c_rest) = full_adder(a[i], b[i], c_in)
+    (res_rest, c_out) = n_adder(a, b, c_rest, i-1)
     return (res_rest + res_i, c_out)
 
 def Mux_n(n: int, variable_list: list[Variable], choice: Variable) -> Variable:
