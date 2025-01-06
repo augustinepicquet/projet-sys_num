@@ -79,28 +79,28 @@ Seconde:
 is_9 b sec
 jnzf Dseconde b
 increm sec
-jmpa 1
+jmpf Ram
 
 Dseconde:
 reset sec
 is_5 b dsec
 jnzf Minute b
 increm dsec
-jmpa 1
+jmpf Ram
 
 Minute:
 reset dsec
 is_9 b min
 jnzf Dminute b
 increm min
-jmpa 1
+jmpf Ram
 
 Dminute:
 reset min
 is_5 b dmin
 jnzf Heure b
 increm dmin
-jmpa 1
+jmpf Ram
 
 Heure:
 reset dmin
@@ -111,12 +111,12 @@ and c d
 jnzf Dheure b
 jnzf Jour c
 increm h
-jmpa 1
+jmpf Ram
 
 Dheure:
 reset h
 increm dh
-jmpa 1
+jmpf Ram
 
 Jour:
 reset h
@@ -177,7 +177,7 @@ and c d
 jnzf Djour b
 jnzf Mois c
 increm j
-jmpa 1
+jmpf Ram
 
 Jour29:
 is_9 b j
@@ -187,7 +187,7 @@ and c d
 jnzf Mois c
 jnzf Djour b
 increm j
-jmpa 1
+jmpf Ram
 
 Jour30:
 is_9 b j
@@ -197,7 +197,7 @@ and c d
 jnzf Djour b
 jnzf Mois c
 increm j
-jmpa 1
+jmpf Ram
 
 Jour31:
 is_9 b j
@@ -207,12 +207,12 @@ and c d
 jnzf Djour b
 jnzf Mois c
 increm j
-jmpa 1
+jmpf Ram
 
 Djour:
 reset j
 increm dj
-jmpa 1
+jmpf Ram
 
 Mois:
 reset j
@@ -225,12 +225,12 @@ and c d
 jnzf Dmois b
 jnzf An c
 increm m
-jmpa 1
+jmpf Ram
 
 Dmois:
 reset m
 increm dm
-jmpa 1
+jmpf Ram
 
 An:
 reset m
@@ -240,25 +240,25 @@ increm m
 is_9 b a
 jnzr 4 b
 increm a
-jmpa 1
+jmpf Ram
 
 reset a
 is_9 b da
 jnzr 4 b
 increm da
-jmpa 1
+jmpf Ram
 
 reset da
 is_9 b ca
 jnzr 4 b
 increm ca
-jmpa 1
+jmpf Ram
 
 reset ca
 is_9 b ma
 jnzr 4 b
 increm ma
-jmpa 1
+jmpf Ram
 
 reset ma
-jmpa 1
+jmpf Ram
