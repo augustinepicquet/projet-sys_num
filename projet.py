@@ -31,14 +31,9 @@ def bloc_registre(reg_size: int, raddr1: Variable, raddr2: Variable, wenable: Va
     log_nb_registre = 5
     l_wenable = Demux_n(log_nb_registre, wenable, raddr1)
     l_registre = []
-    i=0
     for wenable_reg in l_wenable:
         reg_i = registre_n_bits(reg_size, wdata, wenable_reg)
         l_registre.append(reg_i)
-        if i < 2:
-            wenable_reg.rename("wenalbe_" + str(i))
-            reg_i.rename("reg_" + str(i))
-        i += 1
     data1 = Mux_n(log_nb_registre, l_registre, raddr1)
     data2 = Mux_n(log_nb_registre, l_registre, raddr2)
     return data1, data2
@@ -109,8 +104,8 @@ def main():
     data_b.rename("data_b")
     r_a.rename("r_a")
     r_b.rename("r_b")
-    #nz.rename("nz")
-    #jnz.rename("jnz")
+    nz.rename("nz")
+    jnz.rename("jnz")
     #jmp_shift.rename("jmp_shift")
     #read_addr.rename("read_addr")
     #new_read_addr.rename("new_read_addr")
