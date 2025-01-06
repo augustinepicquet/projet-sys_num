@@ -36,8 +36,8 @@ def increm(reg_size: int, seg_digit: Variable) -> Variable:
     choice = seg_digit[1] + seg_digit[4:7]
     variable_list = [default, default, default, digit_segment_of_int(reg_size, 6),
                      default, default, default, digit_segment_of_int(reg_size, 7),
-                     digit_segment_of_int(reg_size, 2), digit_segment_of_int(reg_size, 4), default, digit_segment_of_int(reg_size, 5),
-                     digit_segment_of_int(reg_size, 8), digit_segment_of_int(reg_size, 3), digit_segment_of_int(reg_size, 1), digit_segment_of_int(reg_size, 9)]
+                     digit_segment_of_int(reg_size, 2), digit_segment_of_int(reg_size, 4), digit_segment_of_int(reg_size, 8), digit_segment_of_int(reg_size, 5),
+                     default, digit_segment_of_int(reg_size, 3), digit_segment_of_int(reg_size, 1), digit_segment_of_int(reg_size, 9)]
     return Mux_n(4, variable_list, choice)
 
 def mul_4(unité: Variable, dizaine: Variable):
