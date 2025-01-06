@@ -1,5 +1,7 @@
 # projet-sys_num
 
+La documentation du langage assembleur se trouve dans langage_assembleur.txt
+
 Il faut mettre tous les fichiers ici présents dans un même dossier et rajouter le fichier netlist_simulator.byte.  
 
 On peut ensuite exécuter n'importe quel fichier assembleur (fichiers avec l'extension .asmb) en procédant de la façon suivante :  
