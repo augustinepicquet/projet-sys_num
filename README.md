@@ -6,7 +6,7 @@ On peut ensuite exécuter n'importe quel fichier assembleur (fichiers avec l'ext
 
 On modifie la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")'  
 
-On exécute assembleur.py avec la commande : python assembleur.py
+On exécute assembleur.py avec la commande : python assembleur.py  
 Un fichier rom.ck contenant le programme en binaire est alors créé.
 
 On crée le fichier projet.net correspondant à la netlist du processeur avec la commande : python carotte.py -o projet.net projet.py
