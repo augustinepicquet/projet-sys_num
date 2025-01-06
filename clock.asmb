@@ -1,33 +1,33 @@
 jmpf Init
 InitWithRam:
 clear compteur
-rram sec compteur
-add compteur compteur 16
-rram dsec compteur
-add compteur compteur 16
-rram min compteur
-add compteur compteur 16
-rram dmin compteur
-add compteur compteur 16
-rram h compteur
-add compteur compteur 16
-rram dh compteur
-add compteur compteur 16
-rram j compteur
-add compteur compteur 16
-rram dj compteur
-add compteur compteur 16
-rram m compteur
-add compteur compteur 16
-rram dm compteur
-add compteur compteur 16
-rram a compteur
-add compteur compteur 16
-rram da compteur
+rram ma compteur
 add compteur compteur 16
 rram ca compteur
 add compteur compteur 16
-rram ma compteur
+rram da compteur
+add compteur compteur 16
+rram a compteur
+add compteur compteur 16
+rram dm compteur
+add compteur compteur 16
+rram m compteur
+add compteur compteur 16
+rram dj compteur
+add compteur compteur 16
+rram j compteur
+add compteur compteur 16
+rram dh compteur
+add compteur compteur 16
+rram h compteur
+add compteur compteur 16
+rram dmin compteur
+add compteur compteur 16
+rram min compteur
+add compteur compteur 16
+rram dsec compteur
+add compteur compteur 16
+rram sec compteur
 
 Init:
 reset sec
@@ -46,61 +46,68 @@ reset ca
 reset ma
 
 Ram:
-clear compteur
-wram sec compteur
-add compteur compteur 16
-wram dsec compteur
-add compteur compteur 16
-wram min compteur
-add compteur compteur 16
-wram dmin compteur
-add compteur compteur 16
-wram h compteur
-add compteur compteur 16
-wram dh compteur
-add compteur compteur 16
-wram j compteur
-add compteur compteur 16
-wram dj compteur
-add compteur compteur 16
-wram m compteur
-add compteur compteur 16
-wram dm compteur
-add compteur compteur 16
-wram a compteur
-add compteur compteur 16
-wram da compteur
+wram ma compteur
 add compteur compteur 16
 wram ca compteur
 add compteur compteur 16
-wram ma compteur
+wram da compteur
+add compteur compteur 16
+wram a compteur
+add compteur compteur 16
+wram dm compteur
+add compteur compteur 16
+wram m compteur
+add compteur compteur 16
+wram dj compteur
+add compteur compteur 16
+wram j compteur
+add compteur compteur 16
+wram dh compteur
+add compteur compteur 16
+wram h compteur
+add compteur compteur 16
+wram dmin compteur
+add compteur compteur 16
+wram min compteur
+add compteur compteur 16
+wram dsec compteur
+add compteur compteur 16
+wram sec compteur
 
 Seconde:
 is_9 b sec
 jnzf Dseconde b
 increm sec
-jmpf Ram
+clear compteur
+add compteur compteur 208
+jmpa 75
 
 Dseconde:
 reset sec
 is_5 b dsec
 jnzf Minute b
 increm dsec
-jmpf Ram
+clear compteur
+add compteur compteur 192
+jmpa 73
 
 Minute:
 reset dsec
 is_9 b min
 jnzf Dminute b
 increm min
-jmpf Ram
+clear compteur
+add compteur compteur 176
+jmpa 71
 
 Dminute:
 reset min
 is_5 b dmin
 jnzf Heure b
 increm dmin
-jmpf Ram
+clear compteur
+add compteur compteur 160
+jmpa 69
 
 Heure:
 reset dmin
@@ -111,12 +118,16 @@ and c d
 jnzf Dheure b
 jnzf Jour c
 increm h
-jmpf Ram
+clear compteur
+add compteur compteur 144
+jmpa 67
 
 Dheure:
 reset h
 increm dh
-jmpf Ram
+clear compteur
+add compteur compteur 128
+jmpa 65
 
 Jour:
 reset h
@@ -176,8 +187,7 @@ is_2 d dj
 and c d
 jnzf Djour b
 jnzf Mois c
-increm j
-jmpf Ram
+jmpf FinJour
 
 Jour29:
 is_9 b j
@@ -186,8 +196,7 @@ is_2 d dj
 and c d
 jnzf Mois c
 jnzf Djour b
-increm j
-jmpf Ram
+jmpf FinJour
 
 Jour30:
 is_9 b j
@@ -196,8 +205,7 @@ is_3 d dj
 and c d
 jnzf Djour b
 jnzf Mois c
-increm j
-jmpf Ram
+jmpf FinJour
 
 Jour31:
 is_9 b j
@@ -206,13 +214,20 @@ is_3 d dj
 and c d
 jnzf Djour b
 jnzf Mois c
+jmpf FinJour
+
+FinJour:
 increm j
-jmpf Ram
+clear compteur
+add compteur compteur 112
+jmpa 63
 
 Djour:
 reset j
 increm dj
-jmpf Ram
+clear compteur
+add compteur compteur 96
+jmpa 61
 
 Mois:
 reset j
@@ -225,12 +240,16 @@ and c d
 jnzf Dmois b
 jnzf An c
 increm m
-jmpf Ram
+clear compteur
+add compteur compteur 80
+jmpa 59
 
 Dmois:
 reset m
 increm dm
-jmpf Ram
+clear compteur
+add compteur compteur 64
+jmpa 57
 
 An:
 reset m
@@ -238,27 +257,35 @@ reset dm
 increm m
 
 is_9 b a
-jnzr 4 b
+jnzr 6 b
 increm a
-jmpf Ram
+clear compteur
+add compteur compteur 48
+jmpa 55
 
 reset a
 is_9 b da
-jnzr 4 b
+jnzr 6 b
 increm da
-jmpf Ram
+clear compteur
+add compteur compteur 32
+jmpa 53
 
 reset da
 is_9 b ca
-jnzr 4 b
+jnzr 6 b
 increm ca
-jmpf Ram
+clear compteur
+add compteur compteur 16
+jmpa 51
 
 reset ca
 is_9 b ma
-jnzr 4 b
+jnzr 6 b
 increm ma
+clear compteur
 jmpf Ram
 
 reset ma
+clear compteur
 jmpf Ram
