@@ -30,20 +30,20 @@ add compteur compteur 16
 rram ma compteur
 
 Init:
-clear sec
-clear dsec
-clear min
-clear dmin
-clear h
-clear dh
-clear j
-clear dj
-clear m
-clear dm
-clear a
-clear da
-clear ca
-clear ma
+reset sec
+reset dsec
+reset min
+reset dmin
+reset h
+reset dh
+reset j
+reset dj
+reset m
+reset dm
+reset a
+reset da
+reset ca
+reset ma
 
 Ram:
 clear compteur
