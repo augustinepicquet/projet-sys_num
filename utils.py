@@ -66,7 +66,7 @@ def Demux_n(n: int, entry: Variable, choice: Variable) -> typing.List[Variable]:
         ls = len(s)
         if ls == 0:
             return ""
-        if s[ls-1] == 0:
+        if s[ls-1] == "0":
             return s[:ls-1] + "1"
         return incr(s[:ls-1]) + "0"
     
