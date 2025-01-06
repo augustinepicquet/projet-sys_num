@@ -1,4 +1,3 @@
-
 from lib_carotte import *
 from aluinstr import *
 from utils import *
@@ -32,8 +31,14 @@ def bloc_registre(reg_size: int, raddr1: Variable, raddr2: Variable, wenable: Va
     log_nb_registre = 5
     l_wenable = Demux_n(log_nb_registre, wenable, raddr1)
     l_registre = []
+    i=0
     for wenable_reg in l_wenable:
-        l_registre.append(registre_n_bits(reg_size, wdata, wenable_reg))
+        reg_i = registre_n_bits(reg_size, wdata, wenable_reg)
+        l_registre.append(reg_i)
+        if i < 2:
+            wenable_reg.rename("wenalbe_" + str(i))
+            reg_i.rename("reg_" + str(i))
+        i += 1
     data1 = Mux_n(log_nb_registre, l_registre, raddr1)
     data2 = Mux_n(log_nb_registre, l_registre, raddr2)
     return data1, data2
@@ -82,6 +87,8 @@ def alu(reg_size: int, data_a: Variable, data_b: Variable, n: Variable, instr: V
 
     return nz, result
 
+
+
 def main():
     # taille max de programme : 2^11 = 2048 lignes
     addr_size_rom = 16
@@ -97,3 +104,13 @@ def main():
     wdata_reg = Mux(rram, result, data_ram)
     jmp_shift = Mux((nz & jnz) ^ jmp, Constant("0"*(addr_size_rom - log_instr_size - 1) + "1" + "0"*log_instr_size), n[log_instr_size:addr_size_rom] + Constant("0"*log_instr_size)) # impose n.bus_size > addr_size_rom
     new_read_addr = n_adder(read_addr, jmp_shift, Constant("0"))[0]
+
+    data_a.rename("data_a")
+    data_b.rename("data_b")
+    r_a.rename("r_a")
+    r_b.rename("r_b")
+    #nz.rename("nz")
+    #jnz.rename("jnz")
+    #jmp_shift.rename("jmp_shift")
+    #read_addr.rename("read_addr")
+    #new_read_addr.rename("new_read_addr")
