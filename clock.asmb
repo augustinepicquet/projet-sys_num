@@ -1,1 +1,264 @@
+jmpf Init
+InitWithRam:
+clear compteur
+rram sec compteur
+add compteur compteur 16
+rram dsec compteur
+add compteur compteur 16
+rram min compteur
+add compteur compteur 16
+rram dmin compteur
+add compteur compteur 16
+rram h compteur
+add compteur compteur 16
+rram dh compteur
+add compteur compteur 16
+rram j compteur
+add compteur compteur 16
+rram dj compteur
+add compteur compteur 16
+rram m compteur
+add compteur compteur 16
+rram dm compteur
+add compteur compteur 16
+rram a compteur
+add compteur compteur 16
+rram da compteur
+add compteur compteur 16
+rram ca compteur
+add compteur compteur 16
+rram ma compteur
 
+Init:
+clear sec
+clear dsec
+clear min
+clear dmin
+clear h
+clear dh
+clear j
+clear dj
+clear m
+clear dm
+clear a
+clear da
+clear ca
+clear ma
+
+Ram:
+clear compteur
+wram sec compteur
+add compteur compteur 16
+wram dsec compteur
+add compteur compteur 16
+wram min compteur
+add compteur compteur 16
+wram dmin compteur
+add compteur compteur 16
+wram h compteur
+add compteur compteur 16
+wram dh compteur
+add compteur compteur 16
+wram j compteur
+add compteur compteur 16
+wram dj compteur
+add compteur compteur 16
+wram m compteur
+add compteur compteur 16
+wram dm compteur
+add compteur compteur 16
+wram a compteur
+add compteur compteur 16
+wram da compteur
+add compteur compteur 16
+wram ca compteur
+add compteur compteur 16
+wram ma compteur
+
+Seconde:
+is_9 b sec
+jnzf Dseconde b
+increm sec
+jmpa 1
+
+Dseconde:
+reset sec
+is_5 b dsec
+jnzf Minute b
+increm dsec
+jmpa 1
+
+Minute:
+reset dsec
+is_9 b min
+jnzf Dminute b
+increm min
+jmpa 1
+
+Dminute:
+reset min
+is_5 b dmin
+jnzf Heure b
+increm dmin
+jmpa 1
+
+Heure:
+reset dmin
+is_9 b h
+is_3 c h
+is_2 d dh
+and c d
+jnzf Dheure b
+jnzf Jour c
+increm h
+jmpa 1
+
+Dheure:
+reset h
+increm dh
+jmpa 1
+
+Jour:
+reset h
+reset dh
+
+# Teste si le mois a 31 jours, le résultat est dans b 
+is_0 b dm
+is_1 c m
+and b c
+is_3 c m
+or b c
+is_5 c m
+or b c
+is_7 c m
+or b c
+is_8 c m
+or b c
+is_0 c m
+or b c
+is_2 c m
+is_1 d dm
+and c d
+or b c
+jnzf Jour31 b
+
+# Teste si le mois a 30 jours, le résultat est dans b
+is_4 c m
+or b c
+is_6 c m
+or b c
+is_9 c m
+or b c
+is_1 c m
+is_1 d dm
+and c d
+or b c
+jnzf Jour30 b
+
+# Si on arrive ici il s'agit du mois de février, on teste d'abord si l'année est bissextile et on met le résultat dans b
+copy b a
+mul_4 b da
+copy c a
+mul_100 c da
+copy d ca
+mul_4 d ma
+and d c
+not c c
+and b c
+or b d
+jnzf Jour29 b
+jmpf Jour28
+
+Jour28:
+is_9 b j
+is_8 c j
+is_2 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+increm j
+jmpa 1
+
+Jour29:
+is_9 b j
+is_9 c j
+is_2 d dj
+and c d
+jnzf Mois c
+jnzf Djour b
+increm j
+jmpa 1
+
+Jour30:
+is_9 b j
+is_0 c j
+is_3 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+increm j
+jmpa 1
+
+Jour31:
+is_9 b j
+is_1 c j
+is_3 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+increm j
+jmpa 1
+
+Djour:
+reset j
+increm dj
+jmpa 1
+
+Mois:
+reset j
+reset dj
+increm j
+is_9 b m
+is_2 c m
+is_1 d dm
+and c d
+jnzf Dmois b
+jnzf An c
+increm m
+jmpa 1
+
+Dmois:
+reset m
+increm dm
+jmpa 1
+
+An:
+reset m
+reset dm
+increm m
+
+is_9 b a
+jnzr 4 b
+increm a
+jmpa 1
+
+reset a
+is_9 b da
+jnzr 4 b
+increm da
+jmpa 1
+
+reset da
+is_9 b ca
+jnzr 4 b
+increm ca
+jmpa 1
+
+reset ca
+is_9 b ma
+jnzr 4 b
+increm ma
+jmpa 1
+
+reset ma
+jmpa 1
