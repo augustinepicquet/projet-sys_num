@@ -1,1 +1,202 @@
+clear temp
+clear b
+# adresseram
+clear compteur
 
+#taille balle (carré de coté ...)
+clear demicote
+
+# coordonnées balle
+clear x
+clear y
+
+# taille raquette
+clear demiraq
+
+# coordonées raquette 
+clear yr1
+clear yr2
+
+# taille raquette constante et puissance de 2
+clear size
+
+# vitesse
+#norme de la vitesse horizontale de la balle
+clear vballe
+# norme de la vitesse verticale de la raquette
+clear vraq
+
+# direction
+clear xbool
+clear ybool 
+#xbool qui dit dans quel sens on va
+#ybool qui dit si on va vers le haut ou vers le bas
+clear dirx 
+clear diry
+
+# taille du plateau
+clear taillex 
+clear tailley 
+
+# aléatoire, au début sera initialisé à la seed et sera modifié à chaque fois qu'on aura besoin de l'aléatoire
+#bool pour dire si on part vers le bas ou vers le haut (le registre aleabool sera un grand chiffre aléatoire que l'onconsidère comme un booléen)
+clear aleabool 
+clear aleax 
+clear aleay
+
+Init:
+rram aleabool compteur
+rram aleax compteur
+add aleax 53
+rram aleay compteur
+add aleay 181
+jmpf Startgame
+
+Wram:
+# 0  : seed
+# 16 : perdu
+# 32 : x
+# 48 : y
+# 64 : yr1
+# 80 : yr2
+# 96 : bouger1
+# 112 : bouger2
+
+clear compteur
+add compteur 32
+wram x compteur
+add compteur 16
+wram y compteur
+add compteur 16
+wram yr1 compteur
+add compteur 16
+wram yr2 compteur
+jmpf Avancer
+
+Startgame:
+addr diry vballe
+jmpf Wram
+
+Bouger1:
+mod_2 temp temp
+jnzr temp 13
+
+# cas où la raquette monte
+addr yr1 vraq
+copy temp yr1
+addr temp demiraq
+subr temp tailley
+positif b temp
+jnzf b Avancer1
+copy yr1 tailley
+subr yr1 demiraq
+jmpf Avancer1
+
+# cas où la raquette descend
+subr yr1 vraq
+copy temp yr1
+subr temp demiraq
+positif b temp
+not b b
+jnzf b Avancer1
+copy yr1 demiraq
+jmpf Avancer1
+
+Bouger2:
+mod_2 temp temp
+jnzr temp 13
+
+# cas où la raquette monte
+addr yr2 vraq
+copy temp yr2
+addr temp demiraq
+subr temp tailley
+positif b temp
+jnzf b Avancer2
+copy yr2 tailley
+subr yr2 demiraq
+jmpf Avancer2
+
+# cas où la raquette descend
+subr yr2 vraq
+copy temp yr2
+subr temp demiraq
+positif b temp
+not b b
+jnzf b Avancer2
+copy yr2 demiraq
+jmpf Avancer2
+
+Avancer:
+clear compteur
+add compteur 96
+rram temp compteur
+jnzf Bouger1
+
+Avancer1:
+add compteur 16
+rram temp compteur
+jnzf Bouger2
+
+Avancer2:
+copy temp x
+jnzr temp 2
+jmpf RaquetteGtouche
+
+subr temp taillex
+jnzr temp 2
+jmpf RaquetteDtouche
+
+copy temp y
+jnzr temp 2
+jmpf Bordtouche
+
+subr temp tailley
+jnzr temp 2
+jmpf Bordtouche
+
+copy temp y
+addr y vballe
+mulr x y 
+divr x temp
+
+jmpf Wram
+
+Bordtouche:
+copy temp tailley
+subr temp diry
+copy diry temp
+not ybool ybool
+jmpf Avancer
+
+RaquetteGtouche:
+copy temp x
+subr temp demicote
+jnzf temp Perdu
+jmpf Rebondraquette
+
+RaquetteDtouche:
+copy temp x
+addr temp demicote
+subr temp taillex
+jnzf temp Perdu
+jmpf Rebondraquette
+
+Rebondraquette:
+alea aleabool
+alea aleax
+alea aleay
+not xbool xbool
+copy ybool aleabool
+copy dirx aleax
+copy diry aleay
+mod_taillex dirx dirx
+mod_tailley diry diry
+jmpf Avancer
+
+Perdu:
+clear compteur
+add compteur 16
+clear temp
+not temp temp
+wram temp compteur
