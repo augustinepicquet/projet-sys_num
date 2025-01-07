@@ -85,10 +85,8 @@ def alu(reg_size: int, data_a: Variable, data_b: Variable, n: Variable, instr: V
 
 
 def main():
-    # taille max de programme : 2^11 = 2048 lignes
     addr_size_rom = 16
     instr_size = 32
-    log_instr_size = 5
     reg_size = 16
     read_addr = registre_n_bits(addr_size_rom, Defer(addr_size_rom, lambda: new_read_addr), Constant("1"))
     instr = ROM(addr_size_rom, instr_size, read_addr)
@@ -97,7 +95,7 @@ def main():
     nz, result = alu(reg_size, data_a, data_b, n, alu_instr)
     data_ram = RAM(reg_size, reg_size, data_b, wram, data_b, data_a)
     wdata_reg = Mux(rram, result, data_ram)
-    jmp_shift = Mux((nz & jnz) ^ jmp, Constant("0"*(addr_size_rom - log_instr_size - 1) + "1" + "0"*log_instr_size), n[log_instr_size:addr_size_rom] + Constant("0"*log_instr_size)) # impose n.bus_size > addr_size_rom
+    jmp_shift = Mux((nz & jnz) ^ jmp, Constant("0"*(addr_size_rom - 1) + "1"), n[n.bus_size - addr_size_rom:n.bus_size]) # impose n.bus_size > addr_size_rom
     new_read_addr = n_adder(read_addr, jmp_shift, Constant("0"))[0]
 
     data_a.rename("data_a")
