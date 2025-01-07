@@ -1,35 +1,6 @@
-jmpf Init
-InitWithRam:
-clear compteur
-rram ma compteur
-add compteur compteur 16
-rram ca compteur
-add compteur compteur 16
-rram da compteur
-add compteur compteur 16
-rram a compteur
-add compteur compteur 16
-rram dm compteur
-add compteur compteur 16
-rram m compteur
-add compteur compteur 16
-rram dj compteur
-add compteur compteur 16
-rram j compteur
-add compteur compteur 16
-rram dh compteur
-add compteur compteur 16
-rram h compteur
-add compteur compteur 16
-rram dmin compteur
-add compteur compteur 16
-rram min compteur
-add compteur compteur 16
-rram dsec compteur
-add compteur compteur 16
-rram sec compteur
-
-Init:
+clear b
+clear c
+clear d
 reset sec
 reset dsec
 reset min
@@ -44,70 +15,94 @@ reset a
 reset da
 reset ca
 reset ma
+clear ramsec
+clear ramdsec
+add ramdsec ramdsec 1
+clear rammin
+add rammin rammin 2
+clear ramdmin
+add ramdmin ramdmin 3
+clear ramh
+add ramh ramh 4
+clear ramdh
+add ramdh ramdh 5
+clear ramj
+add ramj ramj 6
+clear ramdj
+add ramdj ramdj 7
+clear ramm
+add ramm ramm 8
+clear ramdm
+add ramdm ramdm 9
+clear rama
+add rama rama 10
+clear ramda
+add ramda ramda 11
+clear ramca
+add ramca ramca 12
+clear ramma 
+add ramma ramma 13
+
+jmpf Ram
+
+InitWithRam:
+rram ma ramma
+rram ca ramca
+rram da ramda
+rram a rama
+rram dm ramdm
+rram m ramm
+rram dj ramdj
+rram j ramj
+rram dh ramdh
+rram h ramh
+rram dmin ramdmin
+rram min rammin
+rram dsec ramdsec
+rram sec ramsec
 
 Ram:
-wram ma compteur
-add compteur compteur 16
-wram ca compteur
-add compteur compteur 16
-wram da compteur
-add compteur compteur 16
-wram a compteur
-add compteur compteur 16
-wram dm compteur
-add compteur compteur 16
-wram m compteur
-add compteur compteur 16
-wram dj compteur
-add compteur compteur 16
-wram j compteur
-add compteur compteur 16
-wram dh compteur
-add compteur compteur 16
-wram h compteur
-add compteur compteur 16
-wram dmin compteur
-add compteur compteur 16
-wram min compteur
-add compteur compteur 16
-wram dsec compteur
-add compteur compteur 16
-wram sec compteur
+wram ma ramma
+wram ca ramca
+wram da ramda
+wram a rama
+wram dm ramdm
+wram m ramm
+wram dj ramdj
+wram j ramj
+wram dh ramdh
+wram h ramh
+wram dmin ramdmin
+wram min rammin
+wram dsec ramdsec
+wram sec ramsec
 
 Seconde:
 is_9 b sec
 jnzf Dseconde b
 increm sec
-clear compteur
-add compteur compteur 208
-jmpa 75
+jmpa 78
 
 Dseconde:
 reset sec
 is_5 b dsec
 jnzf Minute b
 increm dsec
-clear compteur
-add compteur compteur 192
-jmpa 73
+jmpa 77
 
 Minute:
 reset dsec
 is_9 b min
 jnzf Dminute b
 increm min
-clear compteur
-add compteur compteur 176
-jmpa 71
+jmpa 76
 
 Dminute:
 reset min
 is_5 b dmin
 jnzf Heure b
 increm dmin
-clear compteur
-add compteur compteur 160
-jmpa 69
+jmpa 75
 
 Heure:
 reset dmin
@@ -118,16 +113,12 @@ and c d
 jnzf Dheure b
 jnzf Jour c
 increm h
-clear compteur
-add compteur compteur 144
-jmpa 67
+jmpa 74
 
 Dheure:
 reset h
 increm dh
-clear compteur
-add compteur compteur 128
-jmpa 65
+jmpa 73
 
 Jour:
 reset h
@@ -218,16 +209,12 @@ jmpf FinJour
 
 FinJour:
 increm j
-clear compteur
-add compteur compteur 112
-jmpa 63
+jmpa 72
 
 Djour:
 reset j
 increm dj
-clear compteur
-add compteur compteur 96
-jmpa 61
+jmpa 71
 
 Mois:
 reset j
@@ -240,16 +227,12 @@ and c d
 jnzf Dmois b
 jnzf An c
 increm m
-clear compteur
-add compteur compteur 80
-jmpa 59
+jmpa 70
 
 Dmois:
 reset m
 increm dm
-clear compteur
-add compteur compteur 64
-jmpa 57
+jmpa 69
 
 An:
 reset m
@@ -259,33 +242,25 @@ increm m
 is_9 b a
 jnzr 6 b
 increm a
-clear compteur
-add compteur compteur 48
-jmpa 55
+jmpa 68
 
 reset a
 is_9 b da
-jnzr 6 b
+jnzr 4 b
 increm da
-clear compteur
-add compteur compteur 32
-jmpa 53
+jmpa 67
 
 reset da
 is_9 b ca
-jnzr 6 b
+jnzr 4 b
 increm ca
-clear compteur
-add compteur compteur 16
-jmpa 51
+jmpa 66
 
 reset ca
 is_9 b ma
-jnzr 6 b
+jnzr 4 b
 increm ma
-clear compteur
-jmpf Ram
+jmpa 65
 
 reset ma
-clear compteur
 jmpf Ram
