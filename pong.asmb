@@ -17,9 +17,6 @@ clear demiraq
 clear yr1
 clear yr2
 
-# taille raquette constante et puissance de 2
-clear size
-
 # vitesse
 #norme de la vitesse horizontale de la balle
 clear vballe
@@ -31,7 +28,8 @@ clear xbool
 clear ybool 
 #xbool qui dit dans quel sens on va
 #ybool qui dit si on va vers le haut ou vers le bas
-clear dirx 
+clear dirx
+addr dirx vballe
 clear diry
 
 # taille du plateau
@@ -41,45 +39,41 @@ clear tailley
 # aléatoire, au début sera initialisé à la seed et sera modifié à chaque fois qu'on aura besoin de l'aléatoire
 #bool pour dire si on part vers le bas ou vers le haut (le registre aleabool sera un grand chiffre aléatoire que l'onconsidère comme un booléen)
 clear aleabool 
-clear aleax 
 clear aleay
 
 Init:
 rram aleabool compteur
-rram aleax compteur
-add aleax 53
 rram aleay compteur
 add aleay 181
 jmpf Startgame
 
 Wram:
 # 0  : seed
-# 16 : perdu
-# 32 : x
-# 48 : y
-# 64 : yr1
-# 80 : yr2
-# 96 : bouger1
-# 112 : bouger2
+# 1 : perdu
+# 2 : x
+# 3 : y
+# 4 : yr1
+# 5 : yr2
+# 6 : bouger1
+# 7 : bouger2
 
 clear compteur
-add compteur 32
+add compteur 2
 wram x compteur
-add compteur 16
+add compteur 1
 wram y compteur
-add compteur 16
+add compteur 1
 wram yr1 compteur
-add compteur 16
+add compteur 1
 wram yr2 compteur
 jmpf Avancer
 
 Startgame:
-addr diry vballe
 jmpf Wram
 
 Bouger1:
 mod_2 temp temp
-jnzr temp 13
+jnzr temp 15
 
 # cas où la raquette monte
 addr yr1 vraq
@@ -87,6 +81,7 @@ copy temp yr1
 addr temp demiraq
 subr temp tailley
 positif b temp
+not b b
 jnzf b Avancer1
 copy yr1 tailley
 subr yr1 demiraq
@@ -97,14 +92,13 @@ subr yr1 vraq
 copy temp yr1
 subr temp demiraq
 positif b temp
-not b b
 jnzf b Avancer1
 copy yr1 demiraq
 jmpf Avancer1
 
 Bouger2:
 mod_2 temp temp
-jnzr temp 13
+jnzr temp 15
 
 # cas où la raquette monte
 addr yr2 vraq
@@ -112,6 +106,7 @@ copy temp yr2
 addr temp demiraq
 subr temp tailley
 positif b temp
+not b b
 jnzf b Avancer2
 copy yr2 tailley
 subr yr2 demiraq
@@ -122,19 +117,18 @@ subr yr2 vraq
 copy temp yr2
 subr temp demiraq
 positif b temp
-not b b
 jnzf b Avancer2
 copy yr2 demiraq
 jmpf Avancer2
 
 Avancer:
 clear compteur
-add compteur 96
+add compteur 6
 rram temp compteur
 jnzf Bouger1
 
 Avancer1:
-add compteur 16
+add compteur 1
 rram temp compteur
 jnzf Bouger2
 
@@ -155,6 +149,8 @@ subr temp tailley
 jnzr temp 2
 jmpf Bordtouche
 
+Avancer3:
+# à modifier !!!!!!!!!!!!!!
 copy temp y
 addr y vballe
 mulr x y 
@@ -163,11 +159,8 @@ divr x temp
 jmpf Wram
 
 Bordtouche:
-copy temp tailley
-subr temp diry
-copy diry temp
 not ybool ybool
-jmpf Avancer
+jmpf Avancer3
 
 RaquetteGtouche:
 copy temp x
@@ -184,19 +177,16 @@ jmpf Rebondraquette
 
 Rebondraquette:
 alea aleabool
-alea aleax
 alea aleay
 not xbool xbool
 copy ybool aleabool
-copy dirx aleax
 copy diry aleay
-mod_taillex dirx dirx
-mod_tailley diry diry
+mod_vmaxy diry diry
 jmpf Avancer
 
 Perdu:
 clear compteur
-add compteur 16
+add compteur 1
 clear temp
 not temp temp
 wram temp compteur
