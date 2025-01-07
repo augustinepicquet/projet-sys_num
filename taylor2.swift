@@ -20,15 +20,11 @@ ADDR additionne r_a et r_b dans r_a et oublie la potentielle retenue 110011
 ADD additionne r_b et n dans r_a et oublie la potentielle retenue 110100
 CLEAR met le registre r_a au vrai zéro 110101
 
-MULR multiplie r_b et r_a et envoie le résultat dans r_a
-MUL multiplie r_b et n et envoie le résultat dans r_a
+NEG renvoie -r_b dans r_a
 SUB r_a - n et résultat dans r_a
 SUBR r_a - r_b et résultat dans r_a
 ALEA met r_a au carré et récupère les bits au centre, résultat dans r_a
-DIV r_a divisé par n arrondi à l'entier le plus proche
-DIVR divise r_a par r_b arrondi à l'entier le plus proche
-MOD_TAILLEX met r_b mod taillex dans r_a
-MOD_TAILLEY met r_b mod tailley dans r_a
+MOD_VMAXY met r_b mod vmaxy dans r_a
 MOD_2 met r_b mod 2 dans r_a
 POSITIF met r_a à vrai si la valeur dans r_b est positive
 
