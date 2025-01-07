@@ -1,5 +1,9 @@
 # projet-sys_num
 
+On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
+Il suffit alors de modifier la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")' et d'executer une fois la commande chmod +x script_shell pour rendre le fichier executable.   
+On peut alors modifier le script comme on veut et l'éxecuter autant qu'on veut avec ./script_shell
+
 La documentation du langage assembleur se trouve dans langage_assembleur.txt
 
 Il faut mettre tous les fichiers ici présents dans un même dossier et créer le fichier netlist_simulator.byte avec la commande :   
