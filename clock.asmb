@@ -8,8 +8,10 @@ reset dmin
 reset h
 reset dh
 reset j
+increm j
 reset dj
 reset m
+increm m
 reset dm
 reset a
 reset da
