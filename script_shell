@@ -2,5 +2,5 @@ ocamlbuild netlist_simulator.byte
 python3 assembleur.py
 python3 carotte.py -o projet.net projet.py
 ./netlist_simulator.byte -n 100000 -c projet.net
-gcc projet.c -o projet
+gcc projet.c -O2 -o projet
 ./projet
