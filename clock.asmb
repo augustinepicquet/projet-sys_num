@@ -18,6 +18,7 @@ reset da
 reset ca
 reset ma
 clear ramsec
+add ramsec ramsec 14
 clear ramdsec
 add ramdsec ramdsec 1
 clear rammin
@@ -64,47 +65,61 @@ rram dsec ramdsec
 rram sec ramsec
 
 Ram:
+Ramma:
 wram ma ramma
+Ramca:
 wram ca ramca
+Ramda:
 wram da ramda
+Rama:
 wram a rama
+Ramdm:
 wram dm ramdm
+Ramm:
 wram m ramm
+Ramdj:
 wram dj ramdj
+Ramj:
 wram j ramj
+Ramdh:
 wram dh ramdh
+Ramh:
 wram h ramh
+Ramdmin:
 wram dmin ramdmin
+Rammin:
 wram min rammin
+Ramdsec:
 wram dsec ramdsec
+Ramsec:
 wram sec ramsec
 
 Seconde:
 is_9 b sec
 jnzf Dseconde b
 increm sec
-jmpa 80
+jmpf Ramsec
 
 Dseconde:
 reset sec
 is_5 b dsec
 jnzf Minute b
 increm dsec
-jmpa 79
+jmpf Ramdsec
 
 Minute:
 reset dsec
 is_9 b min
 jnzf Dminute b
 increm min
-jmpa 78
+jmpf Rammin
 
 Dminute:
 reset min
 is_5 b dmin
 jnzf Heure b
 increm dmin
-jmpa 77
+jmpf Ramdmin
 
 Heure:
 reset dmin
@@ -115,12 +130,12 @@ and c d
 jnzf Dheure b
 jnzf Jour c
 increm h
-jmpa 76
+jmpf Ramh
 
 Dheure:
 reset h
 increm dh
-jmpa 75
+jmpf Ramdh
 
 Jour:
 reset h
@@ -211,12 +226,12 @@ jmpf FinJour
 
 FinJour:
 increm j
-jmpa 74
+jmpf Ramj
 
 Djour:
 reset j
 increm dj
-jmpa 73
+jmpf Ramdj
 
 Mois:
 reset j
@@ -229,12 +244,12 @@ and c d
 jnzf Dmois b
 jnzf An c
 increm m
-jmpa 72
+jmpf Ramm
 
 Dmois:
 reset m
 increm dm
-jmpa 71
+jmpf Ramdm
 
 An:
 reset m
@@ -244,25 +259,25 @@ increm m
 is_9 b a
 jnzr 6 b
 increm a
-jmpa 70
+jmpf Rama
 
 reset a
 is_9 b da
 jnzr 4 b
 increm da
-jmpa 69
+jmpf Ramda
 
 reset da
 is_9 b ca
 jnzr 4 b
 increm ca
-jmpa 68
+jmpf Ramca
 
 reset ca
 is_9 b ma
 jnzr 4 b
 increm ma
-jmpa 67
+jmpf Ramma
 
 reset ma
 jmpf Ram
