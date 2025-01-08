@@ -18,7 +18,6 @@ reset da
 reset ca
 reset ma
 clear ramsec
-add ramsec ramsec 14
 clear ramdsec
 add ramdsec ramdsec 1
 clear rammin
