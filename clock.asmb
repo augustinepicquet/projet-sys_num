@@ -279,4 +279,7 @@ increm ma
 jmpf Ramma
 
 reset ma
+reset ca
+reset da
+reset a
 jmpf Ram
