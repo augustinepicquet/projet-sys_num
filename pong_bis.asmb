@@ -1,3 +1,6 @@
+
+#version du pong ou on fixe la direction en fonction de la vitesse constante choisie....
+
 clear temp
 clear b
 # adresseram
@@ -24,21 +27,26 @@ clear vballe
 clear vraq
 
 # direction
+#1 si va vers la droite, 0 si va vers la gauche
 clear xbool
 clear ybool 
 #xbool qui dit dans quel sens on va (ie vers la droite ou vers la gauche)
 #ybool qui dit si on va vers le haut ou vers le bas (par rapport au point x sur la droite ou sur la partie gauche du plateau)
+
+#on definit que la vitesse horizontale de la balle est exactement le projeté du vecteur vitesse selon l'axe des abscisses
 clear dirx
-#ca signifie quoi???
+#on fixe la valeur dirx comme expliqué
 addr dirx vballe
 clear diry
-#dirx est l'abscisse du point sur la plafond ou le sol de notre plateau 
+#dirx est l'abscisse du point sur la plafond ou le sol de notre plateau (fixe)
 #diry est l'ordonnée du point sur le coté droit ou gauche du plateau
+#MODIF : diry est signé, ce qui nous perme"tde juste sommer pour se deplacer
+
 
 # taille du plateau
 clear taillex 
 clear tailley 
-#on initilisera  à la valeur : 
+#on initilisera  à la valeur : tailley = 20 000, taillex = 40 000
 
 # aléatoire, au début sera initialisé à la seed et sera modifié à chaque fois qu'on aura besoin de l'aléatoire
 #bool pour dire si on part vers le bas ou vers le haut (le registre aleabool sera un grand chiffre aléatoire que l'onconsidère comme un booléen en prenant le bit de poid faible)
@@ -52,6 +60,29 @@ rram aleay compteur
 #on essaie d'avoir 2 nombre différents en ajoutant un nombre à alea y
 add aleay 181
 jmpf Startgame
+
+#initialisation des valeurs 
+add taillex 40000
+add tailley 20000
+add demicote 200
+#position initale de la balle : 
+add x 0
+add y 10000
+add demiraq 1500
+add yr1 10000
+add yr2 10000
+#il faudra probablement augmenter cette valeur
+add vballe 1000
+add vraq 500
+add xbool 1
+add ybool 0 
+#dirx est déja initialisé plus haut à vballe
+add dirx 0 
+#la balle commence par aller en ligne droite
+add diry 0 
+
+
+
 
 #emplacements dans la ram
 Wram:
@@ -125,10 +156,15 @@ subr yr2 demiraq
 jmpf Avancer2
 
 # cas où la raquette descend
+#on deplace le centre de la raquette vers le bas
 subr yr2 vraq
+#conserve sa place
 copy temp yr2
+#trouve le coté bas de la raquette
 subr temp demiraq
+#met vrai dans b si temp est vraie ie si tout va bien
 positif b temp
+#si b est faux (ie si tout va mal)
 jnzf b Avancer2
 copy yr2 demiraq
 jmpf Avancer2
@@ -164,17 +200,54 @@ jnzr temp 2
 jmpf Bordtouche
 
 Avancer3:
-# à modifier !!!!!!!!!!!!!!
 
 
+
+#vballe = dirx : le produit en croix est trivial
+addr x vballe
+addr y diry
+
+#verification qu'il n'y a pas de sortie du plateau 
+#par le bord gauche 
+positif temp x 
+#si positif on saute les deux lignes, sinon on les fait
+jnzr temp 3
+clear x 
+addr x demicote
+
+#par le bord droit 
+copy temp x 
+subr temp taillex 
+positif b temp 
+not b b 
+#si c'est negatif ie s'il y a un probleme on fait la ligne, sinon on saute
+jnzr b 3
+copy x taillex 
+subr x demicote
+
+#par le sol
+positif temp y
+jnzr temp 3
+clear y  
+addr y demicote
+
+#par le plafond
 copy temp y
-addr y vballe
-mulr x y 
-divr x temp
+subr temp tailley
+positif b temp 
+not b b 
+#si c'est negatif ie s'il y a un probleme on fait la ligne, sinon on saute
+jnzr b 3
+copy y tailley
+subr y demicote
+
+
+
 
 jmpf Wram
 
 Bordtouche:
+neg diry diry
 not ybool ybool
 jmpf Avancer3
 
@@ -202,7 +275,7 @@ jmpf Avancer
 
 Perdu:
 clear compteur
-add compteur 1
+add compteur compteur 1
 clear temp
 not temp temp
 wram temp compteur

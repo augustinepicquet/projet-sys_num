@@ -11,13 +11,15 @@ READ_RAM à l'adresse stocké dans r_b et l'affecter à r_a 000010
 JMP offset n 000100
 JNZ offset n si la valeure stocké dans r_a est non nulle 001000
 
-COPY copie r_b dans r_a 100000
+COPY r_a r_b copie r_b dans r_a 100000
 AND 100001
 NOT effectué sur r_b et renvoyé dans r_a 100010
 OR 100011
 XOR 100100
 ADDR additionne r_a et r_b dans r_a et oublie la potentielle retenue 110011
-ADD additionne r_b et n dans r_a et oublie la potentielle retenue 110100
+
+#MODIF DE LA SYNTAXE, vérifier avec sub la coherence
+ADD r_a r_b n additionne r_b et n dans r_a et oublie la potentielle retenue 110100
 CLEAR met le registre r_a au vrai zéro 110101
 
 NEG renvoie -r_b dans r_a
@@ -26,7 +28,7 @@ SUBR r_a - r_b et résultat dans r_a
 ALEA met r_a au carré et récupère les bits au centre, résultat dans r_a
 MOD_VMAXY met r_b mod vmaxy dans r_a
 MOD_2 met r_b mod 2 dans r_a
-POSITIF met r_a à vrai si la valeur dans r_b est positive
+POSITIF r_a r_b met r_a à vrai si la valeur dans r_b est positive
 
 Decodage (nuage):
     1 bit pour savoir si on écrit dans la RAM
