@@ -25,6 +25,8 @@ IS_6 effectué sur r_b renvoyé dans r_a 101011
 IS_7 effectué sur r_b renvoyé dans r_a 101100
 IS_8 effectué sur r_b renvoyé dans r_a 101101
 IS_9 effectué sur r_b renvoyé dans r_a 101110
+
+
 INCREM effectué sur r_a renvoyé dans r_a 101111 ne pas utiliser INCREM pour passer de 9 à 0 (lorsqu'on passe une dizaine), utiliser RESET à la place
 MUL_4 effectué sur r_b et r_a renvoyé dans r_a (registre param 2 (unité (r_a) et dizaine (r_b) année (potentiellement des centaines))) 110000
 MUL_100 effectué sur r_b et r_a renvoyé dans r_a (registre param (unité (r_a) et dizaine (r_b) année)) 110001

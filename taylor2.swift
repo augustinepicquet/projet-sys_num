@@ -16,12 +16,16 @@ AND 100001
 NOT effectué sur r_b et renvoyé dans r_a 100010
 OR 100011
 XOR 100100
+
+
 ADDR additionne r_a et r_b dans r_a et oublie la potentielle retenue 110011
 
 #MODIF DE LA SYNTAXE, vérifier avec sub la coherence
 ADD r_a r_b n additionne r_b et n dans r_a et oublie la potentielle retenue 110100
 CLEAR met le registre r_a au vrai zéro 110101
 
+
+A faire dans l'alu en plus de celle du pong : 
 NEG renvoie -r_b dans r_a
 SUB r_a - n et résultat dans r_a
 SUBR r_a - r_b et résultat dans r_a
