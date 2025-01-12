@@ -69,16 +69,17 @@ def Demux_n(n: int, entry: Variable, choice: Variable) -> typing.List[Variable]:
 def neg(a : Variable, b : Variable):
     b = ~b 
     #on se fiche de la retenue sortante, ie de f
-    (e,f) = n_adder(b,Variable(1), Variable(0))
+    (e,f) = n_adder(b,Variable("0000000000000001", 16), Variable("0000000000000000", 16))
     return e 
 
 
 def subr(a : Variable, b : Variable):
     b = neg(b,b)
-    (e,f) = n_adder(a,b, Variable(0))
+    (e,f) = n_adder(a,b, Variable("0000000000000000", 16))
     return e 
 
 def sub(a : Variable, n : int):
+    #implémenter une conversion base 10 base 2?
     return subr(a,Variable(n))
 
 def divise_par_deux(a : Variable):
@@ -87,18 +88,19 @@ def divise_par_deux(a : Variable):
     a[0] = 0
     return a 
 
-#on utilise la méthode de fibonnaci : on a deux seeds : x_i et x_i_1 et on calcule x_i_2 : x_i + x_i_1 mod M
+#on utilise la méthode de fibonacci : on a deux seeds : x_i et x_i_1 et on calcule x_i_2 : x_i + x_i_1 mod M
 #pour avoir un nombre relatif, on soustrait (m-1)//2 à la fin.
 #renvoie(a,b,c) avec a l'aléatoire qu'on veut (peut etre positif ou négatif), b et c les seeds pour la prochaine génération
 #note : il faudra réinjecter les valeurs de retour dans la fonction dans le meme ordre  (sinon risque de conserver toujours une valeur sur les deux)
 def alea(x_n : Variable, x_n_1 : Variable, M : int ):
-    x_n_2 = n_adder(x_n, x_n_1, Variable(0))
+    x_n_2 = n_adder(x_n, x_n_1, Variable("0000000000000000", 16))
+    #encore conversion base 10 base 2?
     return (subr(x_n_1, divise_par_deux(Variable(M-1))), x_n_1, x_n_2)
 
 
 #renvoie un bool avec la convention : 1 = true, 0 = false
 def positif(a : Variable):
-    return Variable(1- a[0])
+    return Variable("000000000000000" + str(1- a[0]), 16)
 
 
 def mod_vmaxY(a : Variable, b : Variable, Vmax : int ):
@@ -112,6 +114,6 @@ def mod_vmaxY(a : Variable, b : Variable, Vmax : int ):
 
 def mod_2(a : Variable):
     #renvoyer bit de poids faible de a
-    return Variable(a[a.bus_size -1 ])
+    return Variable(str(a[a.bus_size -1 ]), )
 
 

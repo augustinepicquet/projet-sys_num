@@ -32,11 +32,14 @@ clear xbool
 clear ybool 
 #xbool qui dit dans quel sens on va (ie vers la droite ou vers la gauche)
 #ybool qui dit si on va vers le haut ou vers le bas (par rapport au point x sur la droite ou sur la partie gauche du plateau)
+#on définit m comme etant l'entier premier par lequel il va falloir faire le modulo pour créer le pseudo-aléatoire
+clear m  
+
 
 #on definit que la vitesse horizontale de la balle est exactement le projeté du vecteur vitesse selon l'axe des abscisses
 clear dirx
 #on fixe la valeur dirx comme expliqué
-addr dirx vballe
+addr dirx dirxvballe
 clear diry
 #dirx est l'abscisse du point sur la plafond ou le sol de notre plateau (fixe)
 #diry est l'ordonnée du point sur le coté droit ou gauche du plateau
@@ -48,38 +51,49 @@ clear taillex
 clear tailley 
 #on initilisera  à la valeur : tailley = 20 000, taillex = 40 000
 
-# aléatoire, au début sera initialisé à la seed et sera modifié à chaque fois qu'on aura besoin de l'aléatoire
+# aléatoire, au début sera initialisé aux seeds et sera modifié à chaque fois qu'on aura besoin de l'aléatoire
 #bool pour dire si on part vers le bas ou vers le haut (le registre aleabool sera un grand chiffre aléatoire que l'onconsidère comme un booléen en prenant le bit de poid faible)
+#NB : on utilise un alea de fibonacci donc on a besoin de 2 seeds...
 clear aleabool 
+clear aleabool_bis
 clear aleay
+clear aleay_bis
 
 Init:
 #création des seed pour l'aléa avec le point de départ de la clock 
 rram aleabool compteur
 rram aleay compteur
+
+rram aleabool_bis compteur
+rram aleay_bis compteur
 #on essaie d'avoir 2 nombre différents en ajoutant un nombre à alea y
-add aleay 181
+add aleay aleay 181
+add aleay_bis aleay_bis 13 
+add aleabool_bis aleabool_bis67
 jmpf Startgame
 
 #initialisation des valeurs 
-add taillex 40000
-add tailley 20000
-add demicote 200
+add taillex taillex40000
+add tailley tailley20000
+add demicote demicote 200
 #position initale de la balle : 
-add x 0
-add y 10000
-add demiraq 1500
-add yr1 10000
-add yr2 10000
+add x x 0
+add y y 10000
+add demiraq demiraq 1500
+add yr1 yr1 10000
+add yr2 yr2 10000
 #il faudra probablement augmenter cette valeur
-add vballe 1000
-add vraq 500
-add xbool 1
-add ybool 0 
+add vballe vballe 1000
+add vraq vraq 500
+#la balle commence par aller vers la droite
+add xbool xbool1
+add ybool ybool 0 
+
+add m m 500
 #dirx est déja initialisé plus haut à vballe
-add dirx 0 
+add dirx dirx 0 
 #la balle commence par aller en ligne droite
-add diry 0 
+add diry diry 0 
 
 
 
@@ -97,13 +111,13 @@ Wram:
 
 clear compteur
 #on skip la valeur de perdu qui ne nous interesse pas, on va directement à x 
-add compteur 2
+add compteur compteur 2
 wram x compteur
-add compteur 1
+add compteur compteur 1
 wram y compteur
-add compteur 1
+add compteur compteur 1
 wram yr1 compteur
-add compteur 1
+add compteur compteur 1
 wram yr2 compteur
 jmpf Avancer
 
@@ -117,7 +131,7 @@ mod_2 temp temp
 jnzr temp 15
 
 # cas où la raquette monte
-addr yr1 vraq
+addr yr1 yr1 vraq
 copy temp yr1
 addr temp demiraq
 subr temp tailley
@@ -171,13 +185,13 @@ jmpf Avancer2
 
 Avancer:
 clear compteur
-add compteur 6
+add compteur compteur 6
 rram temp compteur
 #on va bouger la raquette gauche
 jnzf Bouger1
 
 Avancer1:
-add compteur 1
+add compteur compteur 1
 rram temp compteur
 #on va bouger la raquette droite
 jnzf Bouger2
@@ -205,6 +219,11 @@ Avancer3:
 
 #vballe = dirx : le produit en croix est trivial
 addr x vballe
+#prise en charge du sens de déplacement
+jnzr xbool 3
+subr y diry
+subr y diry
+
 addr y diry
 
 #verification qu'il n'y a pas de sortie du plateau 
