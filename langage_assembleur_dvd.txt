@@ -1,0 +1,27 @@
+Les accolades désignent un paramètre mais ne doivent pas être écrite explicitement
+
+jmpa {n° ligne : entier postif} : saute à la ligne donnée
+jmpf {nom de fonction} : saute à la fonction indiquée
+jmpr {décalage : entier relatif} : saute à la ligne actuelle + décalage
+jnza {n° ligne : entier postif} {nom du registre a} : saute à la ligne donnée
+jnzr {décalage : entier relatif} {nom du registre a} : saute à la ligne actuelle + décalage
+jnzf {nom de fonction} {nom du registre a}: saute à la fonction indiquée
+
+wram {nom du registre a} {nom du registre b}
+rram {nom du registre a} {nom du registre b}
+
+Instructions de l'alu :
+clear {nom du registre a}
+add {nom du registre a} {nom du registre b} {n: entier relatif}
+sub {nom du registre a} {nom du registre b} {n: entier relatif}
+{nom de l'instruction} {nom du registre a} {nom du registre b}
+
+noms d'instruction restants : 
+copy, and, not, or, xor, addr, subr, mod_2, positif, neg
+
+Les paramètres sont séparés par un ou plusieurs espaces
+On peut définir une fonction assembleur en mettant son nom suivi d'un ":".
+Les noms de fonctions acceptés commencent par une majuscule et ne contiennent que des lettres et des chiffres.
+Les sauts de lignes et les espaces dans le fichier n'ont aucun impact.
+Les noms de registre commencent par une minuscule et ne contiennent que des lettres et des chiffres.
+On peut ajouter des commentaires en mettant "#" en début de ligne.
