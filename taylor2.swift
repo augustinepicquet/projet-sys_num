@@ -11,28 +11,20 @@ READ_RAM à l'adresse stocké dans r_b et l'affecter à r_a 000010
 JMP offset n 000100
 JNZ offset n si la valeure stocké dans r_a est non nulle 001000
 
-COPY r_a r_b copie r_b dans r_a 100000
+COPY copie r_b dans r_a 100000
 AND 100001
 NOT effectué sur r_b et renvoyé dans r_a 100010
 OR 100011
 XOR 100100
+ADDR additionne r_a et r_b dans r_a et oublie la potentielle retenue 100101
+ADD additionne r_b et n dans r_a et oublie la potentielle retenue 100110
+CLEAR met le registre r_a au vrai zéro 100111
 
-
-ADDR additionne r_a et r_b dans r_a et oublie la potentielle retenue 110011
-
-#MODIF DE LA SYNTAXE, vérifier avec sub la coherence
-ADD r_a r_b n additionne r_b et n dans r_a et oublie la potentielle retenue 110100
-CLEAR met le registre r_a au vrai zéro 110101
-
-
-A faire dans l'alu en plus de celle du pong : 
-NEG renvoie -r_b dans r_a
-SUB r_a - n et résultat dans r_a
-SUBR r_a - r_b et résultat dans r_a
-ALEA met r_a au carré et récupère les bits au centre, résultat dans r_a
-MOD_VMAXY met r_b mod vmaxy dans r_a
-MOD_2 met r_b mod 2 dans r_a
-POSITIF r_a r_b met r_a à vrai si la valeur dans r_b est positive
+NEG renvoie -r_b dans r_a 101000
+SUB r_a - n et résultat dans r_a 101001
+SUBR r_a - r_b et résultat dans r_a 101010
+MOD_2 met r_b mod 2 dans r_a 101011
+POSITIF met r_a à vrai si la valeur dans r_b est positive 101100
 
 Decodage (nuage):
     1 bit pour savoir si on écrit dans la RAM
