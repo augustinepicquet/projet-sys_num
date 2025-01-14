@@ -1,5 +1,5 @@
 # Projet système numérique
-# Nouvelle version
+## Nouvelle version
 Les scripts script_clock_fast, script_clock_real et script_dvd font tout directement pas besoin de se prendre la tête. 
 ```bash
 chmod +x script_dvd
@@ -23,11 +23,11 @@ sudo apt install libsdl2-dev
 ```
 Aussi il faut bien penser à lier le module pendant la compilation (les scripts le font automatiquement).  
 
-## Performance  
+### Performance  
 La clock_fast tourne à 30 secondes pour un an soit 12 heures par seconde sur mon ordinateur.  
 
 
-# Ancienne version
+## Ancienne version
 On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
 Il suffit alors de modifier la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")' et d'executer une fois la commande chmod +x script_shell pour rendre le fichier executable.   
 On peut alors modifier le script comme on veut et l'éxecuter autant qu'on veut avec ./script_shell
