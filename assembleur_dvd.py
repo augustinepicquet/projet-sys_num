@@ -41,7 +41,7 @@ def compil_instr(previous_dico_registre, num_ligne, instr):
         
         return dico_registre[reg]
 
-    n_size = 32
+    n_size = 16
     dico_instr_bin = {"jmp" : "000100", "jnz" : "001000", "wram" : "000001", "rram" : "000010",
                       "copy" : "100000", "and" : "100001", "not" : "100010", "or" : "100011", "xor" : "100100",
                       "addr" : "100101", "add" : "100110", "clear" : "100111", "neg" : "101000", "sub" : "101001", "subr" : "101010", "mod_2" : "101011", 
@@ -164,4 +164,4 @@ def compil(filename):
         outfile.write(output)
 
 
-compil("test.asmb")
+compil("DVD.asmb")
