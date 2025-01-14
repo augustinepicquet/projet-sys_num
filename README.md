@@ -1,5 +1,6 @@
 # projet-sys_num
 
+# Ancienne version
 On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
 Il suffit alors de modifier la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")' et d'executer une fois la commande chmod +x script_shell pour rendre le fichier executable.   
 On peut alors modifier le script comme on veut et l'éxecuter autant qu'on veut avec ./script_shell
