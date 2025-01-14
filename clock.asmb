@@ -255,7 +255,7 @@ reset dm
 increm m
 
 is_9 b a
-jnzr 6 b
+jnzr 4 b
 increm a
 jmpf Rama
 
