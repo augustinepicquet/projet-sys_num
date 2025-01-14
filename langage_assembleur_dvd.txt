@@ -13,7 +13,7 @@ rram {nom du registre a} {nom du registre b}
 Instructions de l'alu :
 clear {nom du registre a}
 add {nom du registre a} {nom du registre b} {n: entier relatif}
-sub {nom du registre a} {nom du registre b} {n: entier relatif}
+sub {nom du registre a} {n: entier relatif}
 {nom de l'instruction} {nom du registre a} {nom du registre b}
 
 noms d'instruction restants : 
