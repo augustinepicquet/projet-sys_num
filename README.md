@@ -6,25 +6,25 @@ chmod +x script_dvd
 ./script_dvd
 ```
 ### Présentation des différents programmes  
-script_clock_fast et script_clock_real utilise tous deux le même processeur. C'est un processeur spécialement optimisé pour gérer une clock.  
+script_clock_fast et script_clock_real utilisent tous deux le même processeur. C'est un processeur spécialement optimisé pour gérer une clock.  
 Il a été implémenté à l'aide de carotte.py (voir explication plus loin) puis a été compilé dans un fichier C. Ce fichier C a été modifié pour ajouter la gestion de l'affichage en 7 segment.  
 Le fichier C a aussi été modifié pour permettre d'initialiser la clock à l'heure et date de notre choix. L'utilisation est la suivante :
 ```bash
 ./clock 00091014012025
 ```
 permettra d'initialiser la clock au 14 janvier 2025 à 10 heures 9 minutes et 0 secondes. L'ordre est l'ordre lexicographique.  
-Les deux programmes clock.asmb et clock_ticking.asmb profite de l'initialisation quelconque de la clock. Si aucun argument n'est fourni, la date par défaut est le premier janvier de l'an 0 à minuit pile.  
+Les deux programmes clock.asmb et clock_ticking.asmb profitent de l'initialisation quelconque de la clock. Si aucun argument n'est fourni, la date par défaut est le premier janvier de l'an 0 à minuit pile.  
 Les fichiers asmb sont transformés en binaire à l'aide de assembleur.py et directement chargé dans rom.ck.  
 Un second processeur est implémenté, lui dans le fichier dvd.c. Ce processeur est plus complet et peut implémenter n'importe quel programme.  
 Un programme est déja fait, DVD.asmb (c'est celui qui est lancé par script_dvd). Il simule l'écran d'attente d'un lecteur DVD qui rebondit.  
 Le fichier dvd.c a été modifié manuellement pour ajouter un rendu graphique.  
-La vitesse et la direction peuvent d'ailleurs facilement être modifé en changeant une ligne dans le fichier asmb.  
+La vitesse et la direction peuvent d'ailleurs facilement être modifées en changeant une ligne dans le fichier asmb.  
 
 ### Explication sommaire des différents fichiers et de leur rôle
 Le fichier projet.py utilise carotte.py pour créer une netlist projet.net (pareil pour projet_dvd.py avec projet_dvd.net).  
 Ensuite cette netlist est compilé à l'aide du netlist_simulator.ml dans un fichier C.  
 Cependant, pour permettre la visualisation des programmes et la gestion des entrées, les programmes C sont ensuites modifiés à la main pour ces cas là. Le code de la netlist traduit en C est quant à lui repris tel quel.  
-Les fichiers clock.c et dvd.c sont ces fichiers retravaillés. Le premier permet donc l'affichage 7 segment. Seul l'affichage et le principe de ticking est ajouté, c'est le programme simulé qui s'occcupe de dire quel segment allumer.  
+Les fichiers clock.c et dvd.c sont ces fichiers retravaillés. Le premier permet donc l'affichage 7 segment. Seul l'affichage et le principe de ticking sont ajoutés, c'est le programme simulé qui s'occcupe de dire quel segment allumer.  
 De même dvd.c affiche le carré mais sa position est toujours calculé par le processeur qui est simulé dans le fichier c.  
 Le fichier assembleur.py (ou assembleur_dvd.py) sert à charger un fichier asmb dans un ficher rom.ck. 
 Et une fois que cela est fait on peut lancer le programme compilé clock ou dvd pour faire ce que l'on souhaite. Il est possible de faire totalement autre chose avec dvd notamment.  
