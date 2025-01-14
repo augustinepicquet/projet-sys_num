@@ -26,28 +26,28 @@ let write_c program  number_steps path =
   let action = ref [IntMain] in 
   let code = ref "#include <stdio.h> \n#include <stdbool.h>\n#include <stdlib.h>\n#include <string.h>\n\n#define RAM_PATH \"ram.ck\"\n#define ROM_PATH \"rom.ck\"\n\n" in
   
-  code := !code ^ ("void printBoolArray(unsigned long long value, unsigned long long cpt_0123456789, const char *ident) {\n\
+  code := !code ^ ("void printBoolArray(int value, int cpt_0123456789, const char *ident) {\n\
   printf(\"%s = \",ident);
-   for (unsigned long long i = cpt_0123456789-1; i >= 0; i--) {\n\
-   printf(\"%llu\",(value >> i) & 1); \n\
+   for (int i = cpt_0123456789-1; i >= 0; i--) {\n\
+   printf(\"%d\",(value >> i) & 1); \n\
    }\n\
    printf(\"\\n\");\n\
   }\n\n");
 
 
-  code := !code ^ ("unsigned long long binary_to_int(const char *bin_str) {\n\
-   return (unsigned long long) strtol(bin_str, NULL, 2); \n\
+  code := !code ^ ("int binary_to_int(const char *bin_str) {\n\
+   return (int) strtol(bin_str, NULL, 2); \n\
    }\n\
    \n\
-   unsigned long long read_binary(unsigned long long size_0123456789,const char *ident) {\n\
+   int read_binary(int size_0123456789,const char *ident) {\n\
    char input[64];  \n\
    \n\
    while (1) {\n\
-       printf(\"%s ? (%llu bits) : \", ident,size_0123456789);\n\
+       printf(\"%s ? (%d bits) : \", ident,size_0123456789);\n\
        scanf(\"%s\", input);  \n\
        if (strlen(input) == size_0123456789) {\n\
-       int all_good = 1;\n\
-           for (unsigned long long i = 0; i < size_0123456789; i++) {\n\
+           int all_good = 1;\n\
+           for (int i = 0; i < size_0123456789; i++) {\n\
                if (input[i] != '0' && input[i] != '1') {\n\
                    all_good = 0;\n\
                    break;\n\
@@ -87,9 +87,9 @@ code := !code ^ "void load_rom(char *ram_data, size_t size) {\n\
 
 
 
-code := !code ^ "\nunsigned long long read_rom(const char *rom, unsigned long long i, unsigned long long j) {
-    unsigned long long result = 0;
-    for (unsigned long long index = i; index < j; ++index) {
+code := !code ^ "\nint read_rom(const char *rom, int i, int j) {
+    int result = 0;
+    for (int index = i; index < j; ++index) {
         result <<= 1;
         if (rom[index] == '1') {
             result |= 1;
@@ -137,8 +137,8 @@ code := !code ^ "\nunsigned long long read_rom(const char *rom, unsigned long lo
   (*Pour le mux, pour le choice, la seul chose qui compte c'est que le bit de poids faible soit 0 ou 1*)
   let get_string_declaration x = 
     match (Env.find x p.p_vars) with 
-    |TBit -> "unsigned long long "^(Hashtbl.find name x)^";\nunsigned long long "^(Hashtbl.find name x)^"_reg_version = 0;\n"
-    |TBitArray n -> "unsigned long long "^(Hashtbl.find name x)^";\n" ^ "unsigned long long "^(Hashtbl.find name x)^"_reg_version = 0;\n" in
+    |TBit -> "int "^(Hashtbl.find name x)^";\nint "^(Hashtbl.find name x)^"_reg_version = 0;\n"
+    |TBitArray n -> "int "^(Hashtbl.find name x)^";\n" ^ "int "^(Hashtbl.find name x)^"_reg_version = 0;\n" in
 
     let v_to_int v =
       match v with
@@ -190,14 +190,13 @@ code := !code ^ "\nunsigned long long read_rom(const char *rom, unsigned long lo
                               action := !action @ [VarAssign (x,val_b)]
         
     | (x, Econcat (a, b)) ->let size_b = string_of_int (arg_to_taille b) in
-                            let size_a = string_of_int (arg_to_taille a) in
-                            let val_b = "("^"("^(arg_to_s a)^" & ((1ULL << "^size_a^") - 1)"^") << "^size_b^") | ("^(arg_to_s b)^" & ((1ULL << "^size_b^") - 1));\n" in
+                            let val_b = "("^(arg_to_s a)^" << "^size_b^") | ("^(arg_to_s b)^" & ((1 << "^size_b^") - 1));\n" in
                             action  := !action @ [VarAssign (x,val_b)]
         
     | (x, Eselect (i, a)) -> let val_b = "("^(arg_to_s a)^" >> ("^(string_of_int (arg_to_taille a))^"-"^(string_of_int i)^" - 1)) & 1;\n" in
                             action := !action @ [VarAssign (x,val_b)]
         
-    | (x, Eslice (i, j, a)) -> let val_b = "("^(arg_to_s a)^" >> ("^(string_of_int (arg_to_taille a))^"-"^(string_of_int j)^"-1)) & ((1ULL << ("^(string_of_int j)^" - "^(string_of_int i)^" + 1)) - 1);\n" in
+    | (x, Eslice (i, j, a)) -> let val_b = "("^(arg_to_s a)^" >> ("^(string_of_int (arg_to_taille a))^"-"^(string_of_int j)^"-1)) & ((1 << ("^(string_of_int j)^" - "^(string_of_int i)^" + 1)) - 1);\n" in
                               action := !action @ [VarAssign (x,val_b)]
                 
     | (x, Eram (addr_size, word_size, read_addr, write_enable, write_addr, write_data)) -> 
@@ -226,7 +225,7 @@ code := !code ^ "\nunsigned long long read_rom(const char *rom, unsigned long lo
     |(addr_size,word_size,we,write_addr,write_data,name)::q -> 
               (*le nom du tableau est donne quand on trouve l'instruction, rajouter les déclarations*)
                 
-                decl_ram := !decl_ram^"unsigned long long "^name^"[1ULL<<"^(string_of_int addr_size)^"];\n for (unsigned long long iiiii=0; iiiii < (1ULL << ("^(string_of_int addr_size)^"));iiiii++){\n"^name^"[iiiii] = 0;};\n";
+                decl_ram := !decl_ram^"int "^name^"[1<<"^(string_of_int addr_size)^"];\n for (int iiiii=0; iiiii < (1 << ("^(string_of_int addr_size)^"));iiiii++){\n"^name^"[iiiii] = 0;};\n";
                 (*let start_pos = "("^(arg_to_s write_addr)^" * "^(string_of_int word_size)^")" in
                 let val_b = "(write_ram(ram_data,"^(start_pos)^","^start_pos^"+"^(string_of_int (word_size))^","^(arg_to_s write_data)^","^(arg_to_s we)^"));\n" in*) (*Encore un héritage d'une époque révolue*)
                 let val_b = name^"["^(arg_to_s write_addr)^"] = "^" ("^(arg_to_s we)^"&1) ? "^(arg_to_s write_data)^" : "^name^"["^(arg_to_s write_addr)^"]"^";\n" in
