@@ -13,6 +13,15 @@ De même dvd.c affiche le carré mais sa position est toujours calculé par le p
 Le fichier assembleur.py (ou assembleur_dvd.py) sert à charger un fichier asmb dans un ficher rom.ck. 
 Et une fois que cela est fait on peut lancer le programme compilé clock ou dvd pour faire ce que l'on souhaite. Il est possible de faire totalement autre chose avec dvd notamment.  
 L'affichage est prévu pour le programme du dvd mais n'importe quel programme est possible en changeant la ROM, seul l'affichage serait à refaire en C.  
+**ATTENTION **  
+Si vous voulez tester il faudra que vous ayez installé la bibliothèque SDL2 au préalable (c'est la bibliothèque qui gère la partie graphique des programmes C)  
+Si vous êtes sur Linux il suffit de faire  
+```bash
+sudo apt install libsdl2-dev
+```
+Aussi il faut bien penser à lier le module pendant la compilation (les scripts le font automatiquement).  
+
+
 # Ancienne version
 On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
 Il suffit alors de modifier la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")' et d'executer une fois la commande chmod +x script_shell pour rendre le fichier executable.   
