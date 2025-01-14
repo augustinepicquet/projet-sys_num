@@ -15,7 +15,7 @@ Le fichier C a aussi été modifié pour permettre d'initialiser la clock à l'h
 permettra d'initialiser la clock au 14 janvier 2025 à 10 heures 9 minutes et 0 secondes. L'ordre est l'ordre lexicographique.  
 Les deux programmes clock.asmb et clock_ticking.asmb profite de l'initialisation quelconque de la clock. Si aucun argument n'est fourni, la date par défaut est le premier janvier de l'an 0 à minuit pile.  
 Les fichiers asmb sont transformés en binaire à l'aide de assembleur.py et directement chargé dans rom.ck.  
-Un second processeur est implémenté, lui dans le fichier dvd.c. Ce processeur est plus complet et peu implémenté n'importe quel programme.  
+Un second processeur est implémenté, lui dans le fichier dvd.c. Ce processeur est plus complet et peut implémenter n'importe quel programme.  
 Un programme est déja fait, DVD.asmb (c'est celui qui est lancé par script_dvd). Il simule l'écran d'attente d'un lecteur DVD qui rebondit.  
 Le fichier dvd.c a été modifié manuellement pour ajouter un rendu graphique.  
 La vitesse et la direction peuvent d'ailleurs facilement être modifé en changeant une ligne dans le fichier asmb.  
