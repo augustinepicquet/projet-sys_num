@@ -1,0 +1,5 @@
+ocamlbuild netlist_simulator.byte
+python3 assembleur_dvd.py
+python3 carotte.py -o projet_dvd.net projet_dvd.py
+./netlist_simulator.byte -n 4 -c projet_dvd.net
+gcc projet_dvd.c -O2 -o projet_dvd
