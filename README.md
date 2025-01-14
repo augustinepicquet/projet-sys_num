@@ -40,7 +40,7 @@ sudo apt install libsdl2-dev
 Aussi il faut bien penser à lier le module pendant la compilation (les scripts le font automatiquement).  
 
 ### Performance  
-La clock_fast tourne à 30 secondes pour un an soit 12 heures par seconde sur un ordinateur classique (des tests plus poussé serait nécessaire).  
+La clock_fast tourne à 30 secondes pour un an soit 12 heures par seconde sur un ordinateur classique (des tests plus poussés seraient nécessaires).  
 
 ## Remarque sur le simulateur de netlist  
 Le simulateur de netlist est celui que l'un des membres du groupe avait déjà codé. Il compile directement en C les netlist pour des questions de performance. Il pourrait d'ailleurs être optimisé. Il a été modifié pour internaliser la RAM.  
