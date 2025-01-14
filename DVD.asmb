@@ -1,1 +1,98 @@
-#code asmb pour le dvd
+#code asmb pour le DVD
+clear xpos
+clear ypos
+clear xgrille
+add xgrille xgrille 1280
+clear ygrille
+add ygrille ygrille 720
+clear ydecalage
+add ydecalage ydecalage 3 #la valeur numérique change la pente
+clear ydecactuel
+clear tempdecy
+clear btempdecy
+clear mod8
+add mod8 mod8 7
+clear avancx
+add avancx avancx 1
+clear avancy
+add avancy avancy 1
+clear temp1
+clear temp2
+
+jmpf Main #A supprimer pour init avec la ram
+
+Initram:
+add temp1 temp1 3
+rram temp2 temp1
+and temp2 mod8
+copy ydecalage temp2
+
+
+Main:
+clear boucle
+add boucle boucle 10 #la valeur numérique sert à modifier la vitesse
+jmpf Boucle
+
+Boucle:
+sub boucle 1
+jnzf Main boucle
+
+Action:
+addr xpos avancx
+addr ydecactuel ydecalage
+copy tempdecy ydecactuel 
+and tempdecy mod8
+copy btempdecy ydecactuel
+subr btempdecy tempdecy
+jnzf Effdec btempdecy
+jmpf Testx
+
+Effdec:
+addr ypos avancy
+positif temp1 ypos
+jnzf Modyneg temp1
+copy temp1 ypos
+subr temp1 ygrille
+add temp1 temp1 1
+positif temp1 temp1
+jnzf Modysup temp1
+jmpf Testx
+
+Modyneg:
+clear ypos
+neg avancy avancy
+jmpf Testx
+
+Modysup
+copy ypos ygrille
+sub ypos 1
+neg avancy avancy
+jmpf Testx
+
+Testx:
+positif temp1 xpos
+jnzf Modxneg temp1
+copy temp1 xpos
+subr temp1 xgrille
+add temp1 temp1 1
+positif temp1 temp1
+jnzf Modxsup temp1
+
+Modxneg:
+clear xpos
+neg avancx avancx
+jmpf Write
+
+Modxsup:
+copy xpos xgrille
+sub xpos 1
+neg avancx avancx
+jmpf Write
+
+Write:
+clear temp1
+add temp1 temp1 1
+wram xpos temp1
+add temp1 temp1 1
+wram ypos temp1
+jmpf Main
