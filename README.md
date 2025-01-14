@@ -23,6 +23,9 @@ sudo apt install libsdl2-dev
 ```
 Aussi il faut bien penser à lier le module pendant la compilation (les scripts le font automatiquement).  
 
+## Performance  
+La clock_fast tourne à 30 secondes pour un an soit 12 heures par seconde sur mon ordinateur.  
+
 
 # Ancienne version
 On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
