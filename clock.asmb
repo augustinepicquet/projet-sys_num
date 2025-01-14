@@ -45,7 +45,6 @@ add ramca ramca 12
 clear ramma 
 add ramma ramma 13
 
-jmpf Ram
 
 InitWithRam:
 rram ma ramma

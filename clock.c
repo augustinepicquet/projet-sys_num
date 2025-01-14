@@ -87,12 +87,22 @@ int read_rom(const char *rom, int i, int j) {
 pthread_mutex_t lock;
 
 uint8_t seven_segment_values[14] = {
-    0b0111111, 0b0111111, // Jour
-    0b0111111, 0b0111111, // Mois
-    0b0111111, 0b0111111, 0b0111111, 0b0111111, // Année
-    0b0111111, 0b0111111, // Heure
-    0b0111111, 0b0111111, // Minute
-    0b0111111, 0b0111111  // Seconde
+    0b0111111, 0b0111111, 
+    0b0111111, 0b0111111, 
+    0b0111111, 0b0111111, 0b0111111, 0b0111111, 
+    0b0111111, 0b0111111, 
+    0b0111111, 0b0111111, 
+    0b0111111, 0b0111111  
+};
+
+uint8_t s_default[14] = {
+    126, 126, 
+    126, 126, 
+    126, 126, 
+    126, 48, 
+    126, 48, 
+    126, 126, 
+    126, 126  
 };
 int tic = 0;
 
@@ -10244,7 +10254,14 @@ int tableau_ram0[1<<16];
  for (int iiiii=0; iiiii < (1 << (16));iiiii++){
 tableau_ram0[iiiii] = 0;};
 
-
+for (int i=0; i < 5; i++){
+    tableau_ram0[i*2] = s_default[i*2+1];
+    tableau_ram0[i*2+1] = s_default[i*2];
+}
+tableau_ram0[13] = s_default[10];
+tableau_ram0[12] = s_default[11];
+tableau_ram0[11] = s_default[12];
+tableau_ram0[10] = s_default[13];
     while (1) {
 
         _l_3220 = 0;
@@ -17020,7 +17037,53 @@ void* update_tic(void* arg) {
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    if (argc == 2){
+        if (strlen(argv[1]) != 14) {
+            printf("L'initialisation doit avoir 14 chiffres.\n");
+            return 1;
+        }
+
+        for (int i = 0; i < 14; i++) {
+            if (argv[1][i] == '0'){
+                s_default[i] = 126;
+            }
+            if (argv[1][i] == '1'){
+                s_default[i] = 48;
+            }
+            if (argv[1][i] == '2'){
+                s_default[i] = 109;
+            }
+            if (argv[1][i] == '3'){
+                s_default[i] = 121;
+            }
+            if (argv[1][i] == '4'){
+                s_default[i] = 51;
+            }
+            if (argv[1][i] == '5'){
+                s_default[i] = 91;
+            }
+            if (argv[1][i] == '6'){
+                s_default[i] = 95;
+            }
+            if (argv[1][i] == '7'){
+                s_default[i] = 114;
+            }
+            if (argv[1][i] == '8'){
+                s_default[i] = 127;
+            }
+            if (argv[1][i] == '9'){
+                s_default[i] = 123;
+            }
+            if (argv[1][i] < '0' || argv[1][i] > '9'){
+                printf("Il faut des chiffres pour initialiser la clock.\n");
+                return 1;
+            }
+    }
+    }
+    
+
     pthread_t sdl_thread_id, update_thread_id, update_tic_id;
     pthread_mutex_init(&lock, NULL);
 
