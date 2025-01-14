@@ -6,7 +6,8 @@ add xgrille xgrille 1280
 clear ygrille
 add ygrille ygrille 720
 clear ydecalage
-add ydecalage ydecalage 3 #la valeur numérique change la pente
+add ydecalage ydecalage 8
+#la valeur numérique change la pente
 clear ydecactuel
 clear tempdecy
 clear btempdecy
@@ -18,8 +19,12 @@ clear avancy
 add avancy avancy 1
 clear temp1
 clear temp2
+#clear debugadd
+#add debugadd debugadd 2
 
-jmpf Main #A supprimer pour init avec la ram
+
+jmpf Main 
+#A supprimer pour init avec la ram
 
 Initram:
 add temp1 temp1 3
@@ -30,12 +35,13 @@ copy ydecalage temp2
 
 Main:
 clear boucle
-add boucle boucle 10 #la valeur numérique sert à modifier la vitesse
+add boucle boucle 5000
+#la valeur numérique sert à modifier la vitesse
 jmpf Boucle
 
 Boucle:
 sub boucle 1
-jnzf Main boucle
+jnzf Boucle boucle
 
 Action:
 addr xpos avancx
@@ -44,16 +50,17 @@ copy tempdecy ydecactuel
 and tempdecy mod8
 copy btempdecy ydecactuel
 subr btempdecy tempdecy
+copy ydecactuel tempdecy
 jnzf Effdec btempdecy
 jmpf Testx
 
 Effdec:
 addr ypos avancy
-positif temp1 ypos
+neg temp1 ypos
+positif temp1 temp1
 jnzf Modyneg temp1
 copy temp1 ypos
 subr temp1 ygrille
-add temp1 temp1 1
 positif temp1 temp1
 jnzf Modysup temp1
 jmpf Testx
@@ -63,20 +70,21 @@ clear ypos
 neg avancy avancy
 jmpf Testx
 
-Modysup
+Modysup:
 copy ypos ygrille
 sub ypos 1
 neg avancy avancy
 jmpf Testx
 
 Testx:
-positif temp1 xpos
+neg temp1 xpos
+positif temp1 temp1
 jnzf Modxneg temp1
 copy temp1 xpos
 subr temp1 xgrille
-add temp1 temp1 1
 positif temp1 temp1
 jnzf Modxsup temp1
+jmpf Write
 
 Modxneg:
 clear xpos
@@ -91,7 +99,6 @@ jmpf Write
 
 Write:
 clear temp1
-add temp1 temp1 1
 wram xpos temp1
 add temp1 temp1 1
 wram ypos temp1

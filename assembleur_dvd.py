@@ -1,3 +1,5 @@
+import argparse
+
 def int_to_bin(n_size, entier, signé):
     if not signé:
         int_n = entier
@@ -163,5 +165,8 @@ def compil(filename):
                 output += bin_instr
         outfile.write(output)
 
+parser = argparse.ArgumentParser(description="")
+parser.add_argument('-s', '--source', type=str, help="Nom du fichier source à utiliser", required=True)
+args = parser.parse_args()
 
-compil("DVD.asmb")
+compil(args.source)

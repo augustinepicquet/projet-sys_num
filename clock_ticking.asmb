@@ -1,0 +1,278 @@
+clear b
+clear c
+clear d
+reset sec
+reset dsec
+reset min
+reset dmin
+reset h
+reset dh
+reset j
+increm j
+reset dj
+reset m
+increm m
+reset dm
+reset a
+reset da
+reset ca
+reset ma
+clear ramsec
+clear ramdsec
+add ramdsec ramdsec 1
+clear rammin
+add rammin rammin 2
+clear ramdmin
+add ramdmin ramdmin 3
+clear ramh
+add ramh ramh 4
+clear ramdh
+add ramdh ramdh 5
+clear ramj
+add ramj ramj 6
+clear ramdj
+add ramdj ramdj 7
+clear ramm
+add ramm ramm 8
+clear ramdm
+add ramdm ramdm 9
+clear rama
+add rama rama 10
+clear ramda
+add ramda ramda 11
+clear ramca
+add ramca ramca 12
+clear ramma 
+add ramma ramma 13
+
+clear check
+
+
+Ram:
+Ramma:
+wram ma ramma
+Ramca:
+wram ca ramca
+Ramda:
+wram da ramda
+Rama:
+wram a rama
+Ramdm:
+wram dm ramdm
+Ramm:
+wram m ramm
+Ramdj:
+wram dj ramdj
+Ramj:
+wram j ramj
+Ramdh:
+wram dh ramdh
+Ramh:
+wram h ramh
+Ramdmin:
+wram dmin ramdmin
+Rammin:
+wram min rammin
+Ramdsec:
+wram dsec ramdsec
+Ramsec:
+wram sec ramsec
+
+Seconde:
+clear ramdsec
+add ramdsec ramdsec 14
+Chec:
+rram check ramdsec
+jnzf Checo check
+jmpf Chec
+Checo:
+wram ramsec ramdsec
+clear ramdsec
+
+add ramdsec ramdsec 1
+is_9 b sec
+jnzf Dseconde b
+increm sec
+jmpf Ramsec
+
+Dseconde:
+reset sec
+is_5 b dsec
+jnzf Minute b
+increm dsec
+jmpf Ramdsec
+
+Minute:
+reset dsec
+is_9 b min
+jnzf Dminute b
+increm min
+jmpf Rammin
+
+Dminute:
+reset min
+is_5 b dmin
+jnzf Heure b
+increm dmin
+jmpf Ramdmin
+
+Heure:
+reset dmin
+is_9 b h
+is_3 c h
+is_2 d dh
+and c d
+jnzf Dheure b
+jnzf Jour c
+increm h
+jmpf Ramh
+
+Dheure:
+reset h
+increm dh
+jmpf Ramdh
+
+Jour:
+reset h
+reset dh
+
+# Teste si le mois a 31 jours, le résultat est dans b 
+is_0 b dm
+is_1 c m
+and b c
+is_3 c m
+or b c
+is_5 c m
+or b c
+is_7 c m
+or b c
+is_8 c m
+or b c
+is_0 c m
+or b c
+is_2 c m
+is_1 d dm
+and c d
+or b c
+jnzf Jour31 b
+
+# Teste si le mois a 30 jours, le résultat est dans b
+is_4 c m
+or b c
+is_6 c m
+or b c
+is_9 c m
+or b c
+is_1 c m
+is_1 d dm
+and c d
+or b c
+jnzf Jour30 b
+
+# Si on arrive ici il s'agit du mois de février, on teste d'abord si l'année est bissextile et on met le résultat dans b
+copy b a
+mul_4 b da
+copy c a
+mul_100 c da
+copy d ca
+mul_4 d ma
+and d c
+not c c
+and b c
+or b d
+jnzf Jour29 b
+jmpf Jour28
+
+Jour28:
+is_9 b j
+is_8 c j
+is_2 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+jmpf FinJour
+
+Jour29:
+is_9 b j
+is_9 c j
+is_2 d dj
+and c d
+jnzf Mois c
+jnzf Djour b
+jmpf FinJour
+
+Jour30:
+is_9 b j
+is_0 c j
+is_3 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+jmpf FinJour
+
+Jour31:
+is_9 b j
+is_1 c j
+is_3 d dj
+and c d
+jnzf Djour b
+jnzf Mois c
+jmpf FinJour
+
+FinJour:
+increm j
+jmpf Ramj
+
+Djour:
+reset j
+increm dj
+jmpf Ramdj
+
+Mois:
+reset j
+reset dj
+increm j
+is_9 b m
+is_2 c m
+is_1 d dm
+and c d
+jnzf Dmois b
+jnzf An c
+increm m
+jmpf Ramm
+
+Dmois:
+reset m
+increm dm
+jmpf Ramdm
+
+An:
+reset m
+reset dm
+increm m
+
+is_9 b a
+jnzr 6 b
+increm a
+jmpf Rama
+
+reset a
+is_9 b da
+jnzr 4 b
+increm da
+jmpf Ramda
+
+reset da
+is_9 b ca
+jnzr 4 b
+increm ca
+jmpf Ramca
+
+reset ca
+is_9 b ma
+jnzr 4 b
+increm ma
+jmpf Ramma
+
+reset ma
+jmpf Ram
