@@ -23,7 +23,7 @@ def dec_instr(instr: Variable) -> typing.Tuple[Variable, Variable, Variable, Var
     alu_instr = instr[1:6]
     r_a = instr[6:11]
     r_b = instr[11:16]
-    n = instr[16:48]
+    n = instr[16:32]
     return wram, wreg, rram, jmp, jnz, alu_instr, r_a, r_b, n
 
 def bloc_registre(reg_size: int, raddr1: Variable, raddr2: Variable, wenable: VariableOrDefer, wdata: VariableOrDefer) -> typing.Tuple[Variable, Variable]:
@@ -74,8 +74,8 @@ def alu(reg_size: int, data_a: Variable, data_b: Variable, n: Variable, instr: V
 
 def main():
     addr_size_rom = 16
-    instr_size = 48
-    reg_size = 32
+    instr_size = 32
+    reg_size = 16
     read_addr = registre_n_bits(addr_size_rom, Defer(addr_size_rom, lambda: new_read_addr), Constant("1"))
     instr = ROM(addr_size_rom, instr_size, read_addr)
     wram, wreg, rram, jmp, jnz, alu_instr, r_a, r_b, n = dec_instr(instr)
