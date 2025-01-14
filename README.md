@@ -1,10 +1,15 @@
-# projet-sys_num
+# Projet système numérique
 # Nouvelle version
 Les scripts script_clock_fast, script_clock_real et script_dvd font tout directement pas besoin de se prendre la tête. 
 ```bash
 chmod +x script_dvd
 ./script_dvd
 ```
+Le fichier projet.py utilise carotte.py pour créer une netlist projet.net (pareil pour projet_dvd.py avec projet_dvd.net).
+Ensuite cette netlist est compilé à l'aide du netlist_simulator.ml dans un fichier C. Cependant, pour permettre la visualisation des programmes et la gestion des entrées, les programmes C sont ensuites modifiés à la main pour ces cas la. Le code de la netlist traduit en C est quant à lui repris tel quel. 
+Les fichiers clock.c et dvd.c sont ces fichiers retravaillés. Le premier permet donc l'affichage 7 segment. Seul l'affichage et le principe de ticking est ajouté, c'est le programme simulé qui s'occcupe de dire quel segment allumé. De même dvd.c affiche le carré mais sa position est toujours calculé par le processeur qui est simulé dans le fichier c. 
+Le fichier assembleur.py (ou assembleur_dvd.py) sert à charger un fichier asmb dans un ficher rom.ck.
+Et une fois que cela est fait on peut lancer le programme compilé clock ou dvd pour faire ce que l'on souhaite. Il est possible de faire totalement autre chose avec dvd notamment. L'affichage est prévu pour le programme du dvd mais n'importe quel programme est possible en changeant la ROM, seul l'affichage serait à refaire en C.
 # Ancienne version
 On peut utiliser le fichier script_shell pour faire toutes les manipulations nécessaires au lancement du processeur.   
 Il suffit alors de modifier la dernière ligne de assembleur.py pour avoir 'compil("fichier.asmb")' et d'executer une fois la commande chmod +x script_shell pour rendre le fichier executable.   
