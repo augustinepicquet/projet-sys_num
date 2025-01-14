@@ -1,3 +1,5 @@
+import argparse
+
 def int_to_bin(n_size, entier):
     int_n = entier
     bin_n = ""
@@ -143,4 +145,8 @@ def compil(filename):
         outfile.write(output)
 
 
-compil("test.asmb")
+parser = argparse.ArgumentParser(description="")
+parser.add_argument('-s', '--source', type=str, help="Nom du fichier source à utiliser", required=True)
+args = parser.parse_args()
+
+compil(args.source)
