@@ -15,7 +15,7 @@ Et une fois que cela est fait on peut lancer le programme compilé clock ou dvd 
 L'affichage est prévu pour le programme du dvd mais n'importe quel programme est possible en changeant la ROM, seul l'affichage serait à refaire en C.  
 **ATTENTION **  
 Si vous voulez tester il faudra que vous ayez installé la bibliothèque SDL2 au préalable (c'est la bibliothèque qui gère la partie graphique des programmes C)  
-Si vous êtes sur Linux il suffit de faire  
+Si vous êtes sur Linux il suffit de faire :  
 ```bash
 sudo apt install libsdl2-dev
 ```
