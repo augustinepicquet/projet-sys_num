@@ -46,5 +46,5 @@ La clock_fast tourne à 30 secondes pour un an soit 12 heures par seconde sur un
 Le simulateur de netlist est celui que l'un des membres du groupe avait déjà codé. Il compile directement en C les netlist pour des questions de performance. Il pourrait d'ailleurs être optimisé. Il a été modifié pour internaliser la RAM.  
 
 ## Documentation
-Les fichiers langage_assembleur.txt et langage_assembleur_dvd.txt explique le langage asmb associé aux 2 processeurs.  
+Les fichiers langage_assembleur.txt et langage_assembleur_dvd.txt expliquent les langages assembleurs associés à chaque processeur.  
 Le jeu d'instruction a été créé par nos soins et n'est basé que sur l'utilisation que l'on en fait et le jeu minimal que l'on a considéré comme nécessaire pour écrire des programmes complexes (pour celui sur le dvd).
