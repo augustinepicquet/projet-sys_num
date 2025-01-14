@@ -64,24 +64,6 @@ let write_c program  number_steps path =
 
 
 
-code := !code ^ "void load_ram(char *ram_data, size_t size) {\n\
-    FILE *file = fopen(RAM_PATH, \"r\"); \n\
-    if (file == NULL) {\n\
-        exit(1);  \n\
-    }\n\
-\n\
-    size_t i = 0;\n\
-    char c;\n\
-    while (i < size && (c = fgetc(file)) != EOF) {\n\
-        if (c == '0' || c == '1') {\n\
-            ram_data[i++] = c;  \n\
-        }\n\
-    }\n\
-\n\
-    ram_data[i] = '\\0';  \n\
-\n\
-    fclose(file);\n\
-}\n";
 
 code := !code ^ "void load_rom(char *ram_data, size_t size) {\n\
     FILE *file = fopen(ROM_PATH, \"r\"); \n\
@@ -103,16 +85,7 @@ code := !code ^ "void load_rom(char *ram_data, size_t size) {\n\
 }\n";
 
 
-code := !code ^ "\nint read_ram(const char *ram, int i, int j) {
-    int result = 0;
-    for (int index = i; index < j; ++index) {
-        result <<= 1;
-        if (ram[index] == '1') {
-            result |= 1;
-        }
-    }
-    return result;
-}\n\n";
+
 
 code := !code ^ "\nint read_rom(const char *rom, int i, int j) {
     int result = 0;
@@ -126,30 +99,14 @@ code := !code ^ "\nint read_rom(const char *rom, int i, int j) {
 }\n\n";
 
 
-code := !code ^ "void write_ram (char *ram, int i, int j, int val, int we) {
-	
-	if (we&1) {
-		int temp = val;
-		for (int index = j-1; index >= i; --index){
-			ram[index] = (temp & 1) ? '1' : '0';	
-			temp = temp >> 1;
-		}
-	}
-}\n\n";
-
-code := !code ^ "void write_ram_file (const char *str) {
-    FILE *file = fopen(RAM_PATH, \"w\");
-    if (file == NULL) {
-        exit(1);
-    }
-    fputs(str, file);
-    fclose(file);
-}\n";
 
 
-  let ram_str = "size_t SIZE_RAM = "^(string_of_int ram_size)^";\nchar ram_data[SIZE_RAM + 1];\n" in
-  let rom_str = "char rom_data[SIZE_RAM + 1];\n\n" in
-  action := !action @ [TrucEnTrop ram_str] @ [TrucEnTrop rom_str];
+
+
+
+  (*let ram_str = "size_t SIZE_RAM = "^(string_of_int ram_size)^";\nchar ram_data[SIZE_RAM + 1];\n" in*)
+  let rom_str = "size_t SIZE_RAM = "^(string_of_int ram_size)^";\n"^"char rom_data[SIZE_RAM + 1];\n\n" in
+  action := !action @  [TrucEnTrop rom_str];
 
 
 
@@ -166,11 +123,13 @@ code := !code ^ "void write_ram_file (const char *str) {
     |t::q -> Hashtbl.replace name t t (*("var_"^(string_of_int i))*);  action := (!action) @ [VarDeclare t];give_name q (i+1); in
   give_name (list_keys p.p_vars) 0;
   
+  let load_rom = "load_rom(rom_data,SIZE_RAM); \n\n" in
+  action := !action @ [TrucEnTrop load_rom];
+
   action := (!action) @ [For number_steps;Jump];
   
-  let load_ram = "load_ram(ram_data,SIZE_RAM); \n" in
-  let load_rom = "load_rom(rom_data,SIZE_RAM); \n\n" in
-  action := !action @ [TrucEnTrop load_ram] @ [TrucEnTrop load_rom];
+  (*let load_ram = "load_ram(ram_data,SIZE_RAM); \n" in*)
+
 
 
   (*Si on a une var x et une var x_reg_version (peu probable) ou x_cpt_ ça pose de gros soucis*)
@@ -203,6 +162,7 @@ code := !code ^ "void write_ram_file (const char *str) {
   action_input (p.p_inputs);
   
   let ram_delay = ref [] in 
+  let cpt_ram = ref 0 in
 
 
 
@@ -240,10 +200,13 @@ code := !code ^ "void write_ram_file (const char *str) {
                               action := !action @ [VarAssign (x,val_b)]
                 
     | (x, Eram (addr_size, word_size, read_addr, write_enable, write_addr, write_data)) -> 
-                                let start_pos = "("^(arg_to_s read_addr)^" * "^(string_of_int word_size)^")" in
-                                let val_b = "(read_ram(ram_data,"^(start_pos)^","^start_pos^"+"^(string_of_int (word_size))^"));\n" in
+                                let name  = "tableau_ram"^(string_of_int !cpt_ram) in
+                                cpt_ram := !cpt_ram + 1;
+                                (*let start_pos = "("^(arg_to_s read_addr)^" * "^(string_of_int word_size)^")" in
+                                let val_b = "(read_ram(ram_data,"^(start_pos)^","^start_pos^"+"^(string_of_int (word_size))^"));\n" in*) (*Héritage d'une époque éteinte*)
+                                let val_b = name^"["^(arg_to_s read_addr)^"];\n" in 
                                 action := !action @ [VarAssign (x,val_b)];
-                                ram_delay := (addr_size, word_size, write_enable, write_addr, write_data)::(!ram_delay)
+                                ram_delay := (addr_size, word_size, write_enable, write_addr, write_data, name)::(!ram_delay)
 
     | (x, Erom (addr_size, word_size, read_addr)) ->  
                                 let start_pos = "("^(arg_to_s read_addr)^" * "^(string_of_int word_size)^")" in
@@ -252,19 +215,27 @@ code := !code ^ "void write_ram_file (const char *str) {
 
   List.iter get_string_equ p.p_eqs;
   
+  let decl_ram = ref "" in
+  
+
+
   let rec add_action_write_ram l =
     match l with 
     |[] -> ()
-    |(addr_size,word_size,we,write_addr,write_data)::q -> 
-                let start_pos = "("^(arg_to_s write_addr)^" * "^(string_of_int word_size)^")" in
-                let val_b = "(write_ram(ram_data,"^(start_pos)^","^start_pos^"+"^(string_of_int (word_size))^","^(arg_to_s write_data)^","^(arg_to_s we)^"));\n" in
+    |(addr_size,word_size,we,write_addr,write_data,name)::q -> 
+              (*le nom du tableau est donne quand on trouve l'instruction, rajouter les déclarations*)
+                
+                decl_ram := !decl_ram^"int "^name^"[1<<"^(string_of_int addr_size)^"];\n for (int iiiii=0; iiiii < (1 << ("^(string_of_int addr_size)^"));iiiii++){\n"^name^"[iiiii] = 0;};\n";
+                (*let start_pos = "("^(arg_to_s write_addr)^" * "^(string_of_int word_size)^")" in
+                let val_b = "(write_ram(ram_data,"^(start_pos)^","^start_pos^"+"^(string_of_int (word_size))^","^(arg_to_s write_data)^","^(arg_to_s we)^"));\n" in*) (*Encore un héritage d'une époque révolue*)
+                let val_b = name^"["^(arg_to_s write_addr)^"] = "^" ("^(arg_to_s we)^"&1) ? "^(arg_to_s write_data)^" : "^name^"["^(arg_to_s write_addr)^"]"^";\n" in
                 action := !action @ [TrucEnTrop val_b]; add_action_write_ram q in
 
   add_action_write_ram !ram_delay;
   
   
-  let write_ram_str = "write_ram_file (ram_data);\n" in
-  action := !action @ [TrucEnTrop write_ram_str];
+  (*let write_ram_str = "write_ram_file (ram_data);\n" in
+  action := !action @ [TrucEnTrop write_ram_str];*) (*Heritage d'une ancienne époque*)
 
 
   let upgarde_end_reg x = (Hashtbl.find name x)^"_reg_version"^" = "^(Hashtbl.find name x)^";\n" in
@@ -287,7 +258,7 @@ code := !code ^ "void write_ram_file (const char *str) {
     |(IntMain)::q -> ("int main()\n{\n") ^ (evolve_code q) ^ ("return 0;\n}\n")
     |(VarDeclare x):: q -> (get_string_declaration x) ^ "\n" ^ (evolve_code q)
     |(VarAssign (a,b))::q -> (Hashtbl.find name a)^" = "^b^(evolve_code q)
-    |(For n)::q -> ("for (int number_steps=0; number_steps < "^(string_of_int n)^"; number_steps ++){\n") ^ (evolve_code q) ^ "}\n"
+    |(For n)::q -> (!decl_ram)^("\nfor (int number_steps=0; number_steps < "^(string_of_int n)^"; number_steps ++){\n") ^ (evolve_code q) ^ "}\n" (*inclure ici la déclaration des tableaus pour les RAM*)
     |(RegUpgradeEndCycle x)::q -> (upgarde_end_reg x)^(evolve_code q)
     |(Jump)::q -> "\n"^(evolve_code q)
     |(PrintVar (x,i))::q -> "printBoolArray("^(Hashtbl.find name x)^","^(string_of_int i)^",\""^(Hashtbl.find name x)^"\");\n"^(evolve_code q)
